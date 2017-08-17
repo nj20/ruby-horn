@@ -13,8 +13,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 
 import none.rubyhorn.R;
-import none.rubyhorn.httpService.HttpRequestManager;
-import none.rubyhorn.locationService.LocationBackend;
 import none.rubyhorn.locationService.LocationLis;
 
 public class Checkin extends AppCompatActivity
@@ -45,11 +43,10 @@ public class Checkin extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_checkin);
         getLocationPermissions();
-        HttpRequestManager requestManager = HttpRequestManager.Instance(this);
-        String url = getString(R.string.host) + "/api/restaurant/location/all";
+        //HttpRequestManager requestManager = HttpRequestManager.Instance(this);
+        //String url = getString(R.string.host) + "/api/restaurant/location/all";
 
-        LocationBackend locationRequest = new LocationBackend(getApplicationContext(), url);
-        locationRequest.getRestaurantsByLocation();
+        getLocationPermissions();
     }
 
     public void getLocationPermissions()

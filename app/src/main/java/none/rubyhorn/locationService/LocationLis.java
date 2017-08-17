@@ -1,15 +1,9 @@
 package none.rubyhorn.locationService;
 
 import android.content.Context;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
-
-import java.io.IOException;
-import java.util.List;
-import java.util.Locale;
 
 public class LocationLis implements android.location.LocationListener
 {
@@ -24,7 +18,14 @@ public class LocationLis implements android.location.LocationListener
     public void onLocationChanged(Location location)
     {
         Log.d("debug", "COMES");
-        //last int how many you want
+
+        //sending the lan and lon to the user in order to display restaurant
+        LocationBackend locationRequest = new LocationBackend(applicationContext.getApplicationContext());
+        locationRequest.getRestaurantsByLocation(location.getLatitude(), location.getLongitude());
+
+
+
+        /*
         try
         {
             Geocoder geocoder = new Geocoder(applicationContext, Locale.getDefault());
@@ -43,6 +44,8 @@ public class LocationLis implements android.location.LocationListener
         {
             e.printStackTrace();
         }
+        */
+
         Log.i("Location", location.toString());
     }
 
