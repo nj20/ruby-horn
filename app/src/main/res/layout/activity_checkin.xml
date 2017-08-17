@@ -31,8 +31,7 @@
 
         <include
             android:id="@+id/card"
-            layout="@layout/checkin_card"
-            >
+            layout="@layout/checkin_card">
 
         </include>
     </android.support.constraint.ConstraintLayout>
