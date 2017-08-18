@@ -8,6 +8,8 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+
+import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
@@ -64,7 +66,11 @@ public class HttpRequestManager
             @Override
             public void onResponse(JSONObject response)
             {
-                listener.onResponse(response);
+                try {
+                    listener.onResponse(response);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         },
         new Response.ErrorListener()
@@ -126,7 +132,7 @@ public class HttpRequestManager
 
     public interface Listener
     {
-        void onResponse(JSONObject response);
+        void onResponse(JSONObject response) throws JSONException;
 
         void onError(JSONObject error);
     }

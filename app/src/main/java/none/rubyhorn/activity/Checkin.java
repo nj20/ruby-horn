@@ -14,7 +14,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import none.rubyhorn.R;
 import none.rubyhorn.locationService.LocationLis;
 
@@ -49,45 +48,20 @@ public class Checkin extends AppCompatActivity
 
         //HttpRequestManager requestManager = HttpRequestManager.Instance(this);
         //String url = getString(R.string.host) + "/api/restaurant/location/all";
-
        // getLocationPermissions();
-
-
         //playing around with some views
-
         //ScrollView scrollingView = (ScrollView) findViewById(R.id.scrollView1);
 
-
         LinearLayout ll = (LinearLayout) findViewById(R.id.include);
-        ImageView imageView = (ImageView) findViewById(R.id.imageView);
-        TextView textView = (TextView) findViewById(R.id.textView);
-        TextView textView1 = (TextView) findViewById(R.id.textView2);
-
+        ImageView imageView = new ImageView(this);
         imageView.setImageResource(R.drawable.mock_image);
 
-        LinearLayout ll1 = (LinearLayout) findViewById(R.id.include);
+        TextView textView = new TextView(this);
+        textView.setText("hello");
 
 
-        ImageView imageView1 = new ImageView(this);
-        imageView1.setImageResource(R.drawable.mock_image);
-
-        TextView textView2 = new TextView(this);
-        textView2.setText("hello");
-
-
-
-        ll1.addView(imageView1);
-        ll1.addView(textView2);
-
-
-
-        //scrollingView.addView(ll);
-
-
-
-
-
-
+        ll.addView(imageView);
+        ll.addView(textView);
     }
 
     public void getLocationPermissions()
@@ -121,3 +95,4 @@ public class Checkin extends AppCompatActivity
         }
     }
 }
+
