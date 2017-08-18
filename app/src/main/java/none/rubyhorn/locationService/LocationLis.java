@@ -21,7 +21,7 @@ public class LocationLis implements android.location.LocationListener
 
         //sending the lan and lon to the user in order to display restaurant
         LocationService locationRequest = new LocationService(applicationContext.getApplicationContext());
-        locationRequest.getRestaurantsByLocation(location.getLatitude(), location.getLongitude());
+        locationRequest.getRestaurantsByLocation(location.getLatitude(), location.getLongitude(), location.getAccuracy());
 
 
 

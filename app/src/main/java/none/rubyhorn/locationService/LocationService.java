@@ -26,27 +26,41 @@ public class LocationService {
         this.url = url;
     }
 
-    public void getRestaurantsByLocation(double lat, double lon){
+    public void getRestaurantsByLocation(double lat, double lon, double acc){
 
-        String url = context.getString(R.string.host) + "/api/restaurant/all";
+
+        String url = context.getString(R.string.host) + "/api/restaurant/location/all";
 
         HashMap<String, String> locationHeader = new HashMap<String, String>();
 
         String latitude = Double.toString(lat);
         String longitude = Double.toString(lon);
+        String accuracy = Double.toString(acc);
+        //range in which to search restaurants
+        String range = Double.toString(100);
 
-        locationHeader.put("lat", latitude);
-        locationHeader.put("lon", longitude);
+        locationHeader.put("latitude", latitude);
+        locationHeader.put("longitude", longitude);
+        locationHeader.put("accuracy", accuracy);
+        locationHeader.put("range", range);
         
         this.requestManager.makeRequest(0, url, locationHeader, null, new HttpRequestManager.Listener() {
             @Override
             public void onResponse(JSONObject response) {
                 Log.d("debug", response.toString());
+                //Log.i("Made1", response.toString());
+
+                //create the components after the response
+
+
+                //response
+
             }
 
             @Override
             public void onError(JSONObject error) {
                 Log.d("error", error.toString());
+                Log.i("Shit", "shit");
             }
         });
     }
