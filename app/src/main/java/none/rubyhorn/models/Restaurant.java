@@ -2,7 +2,6 @@ package none.rubyhorn.models;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.util.Log;
 import android.widget.ImageView;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;

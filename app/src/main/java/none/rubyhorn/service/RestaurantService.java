@@ -1,16 +1,10 @@
 package none.rubyhorn.service;
 
 import android.content.Context;
-
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-
 import org.json.JSONObject;
-
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
-
 import none.rubyhorn.R;
 import none.rubyhorn.http.HttpRequestManager;
 import none.rubyhorn.models.Restaurant;

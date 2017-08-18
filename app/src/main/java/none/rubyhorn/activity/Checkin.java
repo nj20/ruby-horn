@@ -3,10 +3,8 @@ package none.rubyhorn.activity;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
-
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-
 import none.rubyhorn.R;
 import none.rubyhorn.activity.template.ActivityWithLocationPermission;
 import none.rubyhorn.adapter.CheckinAdapter;
@@ -30,7 +28,8 @@ public class Checkin extends ActivityWithLocationPermission
         double longitude = location.getLongitude();
         float accuracy = location.getAccuracy();
 
-        restaurantService.getRestaurantsByLocation(latitude, longitude, accuracy, 1000000000, new Response.Listener<Restaurant[]>() {
+        restaurantService.getRestaurantsByLocation(latitude, longitude, accuracy, 1000000000, new Response.Listener<Restaurant[]>()
+        {
             @Override
             public void onResponse(Restaurant[] restaurants)
             {
