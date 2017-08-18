@@ -1,4 +1,4 @@
-package none.rubyhorn.httpService;
+package none.rubyhorn.http;
 
 import android.content.Context;
 

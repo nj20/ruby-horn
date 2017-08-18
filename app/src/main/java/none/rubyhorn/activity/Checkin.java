@@ -1,91 +1,55 @@
 package none.rubyhorn.activity;
 
-import android.Manifest;
-import android.content.Context;
-import android.content.pm.PackageManager;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.os.Build;
+import android.location.Location;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.util.Log;
+
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+
 import none.rubyhorn.R;
+import none.rubyhorn.activity.template.ActivityWithLocationPermission;
 import none.rubyhorn.adapter.CheckinAdapter;
-import none.rubyhorn.locationService.LocationLis;
+import none.rubyhorn.models.Restaurant;
+import none.rubyhorn.service.RestaurantService;
 
-public class Checkin extends AppCompatActivity
+public class Checkin extends ActivityWithLocationPermission
 {
-
-    LocationManager locationManager;
-    LocationListener locationListener;
-
-    private CheckinAdapter checkinAdapter;
-
-    //check for permission first time and adds location service permission
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
-    {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        //check if we have permission
-        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-        {
-            if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-            }
-        }
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_checkin);
-        getLocationPermissions();
-        setRestaurntList();
     }
 
-    private void setRestaurntList()
+    @Override
+    public void onLocationChange(Location location)
     {
-        checkinAdapter = CheckinAdapter.Instance();
-        checkinAdapter.setView(this);
+        RestaurantService restaurantService = RestaurantService.Instance(this);
+        double latitude = location.getLatitude();
+        double longitude = location.getLongitude();
+        float accuracy = location.getAccuracy();
+
+        restaurantService.getRestaurantsByLocation(latitude, longitude, accuracy, 1000000000, new Response.Listener<Restaurant[]>() {
+            @Override
+            public void onResponse(Restaurant[] restaurants)
+            {
+                updateRestaurants(restaurants);
+            }
+        }, new Response.ErrorListener()
+        {
+            @Override
+            public void onErrorResponse(VolleyError error)
+            {
+                Log.d("ERROR", error.toString());
+            }
+        });
     }
 
-    public void getLocationPermissions()
+    private void updateRestaurants(Restaurant[] restaurants)
     {
-        //how to access the location of the user
-        //ask for location service
-        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-
-        //location listener, listens for changes in location
-        locationListener = new LocationLis(getApplicationContext());
-
-        //if devide is running SDK < 23 just use it without request
-        if (Build.VERSION.SDK_INT < 23)
-        {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-        }
-        else
-        {
-            //we need to request user permission to location, check if we have location
-            //check if we have permission, if the location has alerady been granted not first time
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
-            {
-                //ask for permission goes to top method
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-            }
-            else
-            {
-                //We have permission
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-            }
-        }
+        CheckinAdapter checkinAdapter = CheckinAdapter.Instance();
+        checkinAdapter.updateRestaurantList(this, restaurants);
     }
 }
 

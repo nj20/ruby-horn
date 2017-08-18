@@ -5,9 +5,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import none.rubyhorn.R;
+import none.rubyhorn.models.Restaurant;
 
 /**
  * Returns the Checkin view (list of restaurants);
@@ -30,12 +33,19 @@ public class CheckinAdapter
 
     }
 
-    public void setView(AppCompatActivity context)
+    public void updateRestaurantList(AppCompatActivity context, Restaurant[] restaurants)
     {
         LinearLayout layout = (LinearLayout)context.findViewById(R.id.restaurantList);
-        for(int count = 0; count < 10; count++)
+        layout.removeAllViews();
+        for(int count = 0; count < restaurants.length; count++)
         {
             View restaurant = View.inflate(context, R.layout.checkin_card, null);
+            TextView header = restaurant.findViewById(R.id.header);
+            TextView description = restaurant.findViewById(R.id.description);
+            header.setText(restaurants[count].name);
+            ImageView image = restaurant.findViewById(R.id.image);
+            image.setImageBitmap(restaurants[count].restaurantImage);
+            description.setText(restaurants[count].description);
             restaurant.setLayoutParams(new ViewGroup.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -43,3 +53,4 @@ public class CheckinAdapter
         }
     }
 }
+

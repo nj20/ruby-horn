@@ -51,7 +51,6 @@
                 android:layout_height="wrap_content" />
         </LinearLayout>
 
-
     </android.support.constraint.ConstraintLayout>
 </ScrollView>
 
