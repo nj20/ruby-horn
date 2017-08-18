@@ -11,6 +11,9 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import none.rubyhorn.R;
 import none.rubyhorn.locationService.LocationLis;
@@ -47,6 +50,29 @@ public class Checkin extends AppCompatActivity
         //String url = getString(R.string.host) + "/api/restaurant/location/all";
 
         getLocationPermissions();
+
+
+        //playing around with some views
+
+        //ScrollView scrollingView = (ScrollView) findViewById(R.id.scrollView1);
+
+        LinearLayout ll = (LinearLayout) findViewById(R.id.include);
+
+        ImageView imageView = new ImageView(this);
+        imageView.setImageResource(R.drawable.mock_image);
+
+        TextView textView = new TextView(this);
+        textView.setText("hello");
+
+
+
+        ll.addView(imageView);
+        ll.addView(textView);
+        //scrollingView.addView(ll);
+
+
+
+
     }
 
     public void getLocationPermissions()

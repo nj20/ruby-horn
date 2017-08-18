@@ -20,7 +20,7 @@ public class LocationLis implements android.location.LocationListener
         Log.d("debug", "COMES");
 
         //sending the lan and lon to the user in order to display restaurant
-        LocationBackend locationRequest = new LocationBackend(applicationContext.getApplicationContext());
+        LocationService locationRequest = new LocationService(applicationContext.getApplicationContext());
         locationRequest.getRestaurantsByLocation(location.getLatitude(), location.getLongitude());
 
 

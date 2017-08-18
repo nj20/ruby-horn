@@ -14,13 +14,13 @@ import none.rubyhorn.httpService.HttpRequestManager;
  * Created by nikolasvamvou on 8/17/17.
  */
 
-public class LocationBackend{
+public class LocationService {
 
     Context context;
     HttpRequestManager requestManager;
     String url;
 
-    public LocationBackend(Context context){
+    public LocationService(Context context){
         this.context = context;
         this.requestManager = HttpRequestManager.Instance(context); //get application context
         this.url = url;
@@ -28,7 +28,7 @@ public class LocationBackend{
 
     public void getRestaurantsByLocation(double lat, double lon){
 
-        String url = context.getString(R.string.host) + "/api/restaurant/location/all";
+        String url = context.getString(R.string.host) + "/api/restaurant/all";
 
         HashMap<String, String> locationHeader = new HashMap<String, String>();
 
