@@ -1,6 +1,7 @@
 package none.rubyhorn.adapter;
 
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -39,13 +40,24 @@ public class CheckinAdapter
             View restaurant = View.inflate(context, R.layout.checkin_card, null);
             TextView header = restaurant.findViewById(R.id.header);
             TextView description = restaurant.findViewById(R.id.description);
-            header.setText(restaurants[count].name);
             ImageView image = restaurant.findViewById(R.id.image);
+            restaurant.setTag(restaurants[count].id);
+            header.setText(restaurants[count].name);
             image.setImageBitmap(restaurants[count].restaurantImage);
             description.setText(restaurants[count].description);
+
             restaurant.setLayoutParams(new ViewGroup.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT));
+
+            restaurant.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View view)
+                {
+                    
+                }
+            });
             layout.addView(restaurant);
         }
     }

@@ -1,6 +1,8 @@
 package none.rubyhorn.service;
 
 import android.content.Context;
+import android.util.Log;
+
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import org.json.JSONObject;

@@ -25,9 +25,11 @@ public class Restaurant
     public String description;
     public double distance;
     public Bitmap restaurantImage;
+    public String id;
 
-    public Restaurant(String name, String description, double distance, Bitmap image)
+    public Restaurant(String id, String name, String description, double distance, Bitmap image)
     {
+        this.id = id;
         this.name = name;
         this.description = description;
         this.distance = distance;
@@ -45,10 +47,11 @@ public class Restaurant
                 {
                     try
                     {
+                        String id = json.getString("_id");
                         String name = json.getString("name");
                         String description = json.getString("description");
                         double distance = Double.parseDouble(json.getString("distance"));
-                        listener.onResponse(new Restaurant(name, description, distance, restaurantImage));
+                        listener.onResponse(new Restaurant(id, name, description, distance, restaurantImage));
                     }catch(Exception e)
                     {
                         errorListener.onErrorResponse(new VolleyError("Exception while converting JSON to resturant"));
