@@ -1,5 +1,6 @@
 package none.rubyhorn.activity;
 
+import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -7,6 +8,7 @@ import android.view.View;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+
 import none.rubyhorn.R;
 import none.rubyhorn.activity.template.ActivityWithLocationPermission;
 import none.rubyhorn.adapter.CheckinAdapter;
@@ -19,6 +21,13 @@ import none.rubyhorn.service.RestaurantService;
  */
 public class Checkin extends ActivityWithLocationPermission
 {
+
+    public void jumpToSecond(View view){
+
+        Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
+        startActivity(intent);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {

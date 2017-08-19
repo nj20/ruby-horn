@@ -18,6 +18,7 @@ import android.support.v7.app.AppCompatActivity;
  * Call getLocationPermissions() to get permissions
  *  Override onLocationChange to get notified
  */
+
 public abstract class ActivityWithLocationPermission extends AppCompatActivity {
 
     protected LocationListener locationListener;
