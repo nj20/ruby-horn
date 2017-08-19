@@ -1,5 +1,6 @@
 package none.rubyhorn.adapter;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import none.rubyhorn.R;
+import none.rubyhorn.activity.MenuActivity;
 import none.rubyhorn.models.Restaurant;
 
 /**
@@ -31,7 +33,7 @@ public class CheckinAdapter
 
     }
 
-    public void updateRestaurantList(AppCompatActivity context, Restaurant[] restaurants)
+    public void updateRestaurantList(final AppCompatActivity context, Restaurant[] restaurants)
     {
         LinearLayout layout = (LinearLayout)context.findViewById(R.id.restaurantList);
         layout.removeAllViews();
@@ -55,7 +57,14 @@ public class CheckinAdapter
                 @Override
                 public void onClick(View view)
                 {
+<<<<<<< HEAD
                     view.getTag().toString();
+=======
+                    String restaurantId = view.getTag().toString();
+                    Intent intent = new Intent(context, MenuActivity.class);
+                    intent.putExtra(context.getString(R.string.restaurantIdMessage), restaurantId);
+                    context.startActivity(intent);
+>>>>>>> 2ec337d8115b73b89ab18d14a187118da304d5ff
                 }
             });
             layout.addView(restaurant);

@@ -21,13 +21,6 @@ import none.rubyhorn.service.RestaurantService;
  */
 public class Checkin extends ActivityWithLocationPermission
 {
-
-    public void jumpToSecond(View view){
-
-        Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
-        startActivity(intent);
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {

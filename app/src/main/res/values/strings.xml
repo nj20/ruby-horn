@@ -6,7 +6,7 @@
     <string name="savedUserid" translatable="false">userid</string>
     <string name="savedUserpassword" translatable="false">userpassword</string>
     <string name="savedSessionkey" translatable="false">sessionkey</string>
-
+    <string name="restaurantIdMessage" translatable="false">none.rubyHorn.restaurantId</string>
     <string name="title_activity_menu">MenuActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
