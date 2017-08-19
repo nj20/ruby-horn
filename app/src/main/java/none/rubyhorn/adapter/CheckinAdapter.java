@@ -57,14 +57,14 @@ public class CheckinAdapter
                 @Override
                 public void onClick(View view)
                 {
-<<<<<<< HEAD
-                    view.getTag().toString();
-=======
+
+                    //view.getTag().toString();
+
                     String restaurantId = view.getTag().toString();
                     Intent intent = new Intent(context, MenuActivity.class);
                     intent.putExtra(context.getString(R.string.restaurantIdMessage), restaurantId);
                     context.startActivity(intent);
->>>>>>> 2ec337d8115b73b89ab18d14a187118da304d5ff
+
                 }
             });
             layout.addView(restaurant);
