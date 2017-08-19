@@ -2,6 +2,12 @@ package none.rubyhorn.models;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.widget.ImageView;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -92,7 +98,7 @@ public class Restaurant
         }
     }
 
-    public static void downloadImage(String url, Response.Listener<Bitmap> listener, Response.ErrorListener errorListener, Context context) throws IOException
+    private static void downloadImage(String url, Response.Listener<Bitmap> listener, Response.ErrorListener errorListener, Context context) throws IOException
     {
         ImageRequest request = new ImageRequest(url, listener, 10000, 10000, ImageView.ScaleType.CENTER_CROP, null, errorListener);
         HttpRequestQueue.Instance(context).add(request);

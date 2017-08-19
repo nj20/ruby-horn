@@ -15,35 +15,35 @@ import android.support.v7.app.AppCompatActivity;
 
 /**
  * Extend this class to get activity with location permission and tracking
+ * Call getLocationPermissions() to get permissions
+ *  Override onLocationChange to get notified
  */
-public abstract class ActivityWithLocationPermission extends AppCompatActivity
-{
-    private LocationListener locationListener;
-    private LocationManager locationManager;
+public abstract class ActivityWithLocationPermission extends AppCompatActivity {
+
+    protected LocationListener locationListener;
+    protected LocationManager locationManager;
+    private long minTimeUpdate = 0;
+    private long minDistanceUpdate = 0;
 
     //check for permission first time and adds location service permission
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
-    {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         //check if we have permission
-        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-        {
-            if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
 
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, minTimeUpdate, minDistanceUpdate, locationListener);
+                Location loc = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                onLocationChange(loc);
             }
         }
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-        getLocationPermissions();
-    }
-
-    private void getLocationPermissions()
+    /**
+     * Requests user for location permission
+     */
+    protected void getLocationPermissions()
     {
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         locationListener = new LocationListener()
@@ -53,17 +53,28 @@ public abstract class ActivityWithLocationPermission extends AppCompatActivity
             {
                 onLocationChange(location);
             }
+
             @Override
-            public void onStatusChanged(String s, int i, Bundle bundle) {}
+            public void onStatusChanged(String s, int i, Bundle bundle)
+            {
+            }
+
             @Override
-            public void onProviderEnabled(String s) {}
+            public void onProviderEnabled(String s)
+            {
+            }
+
             @Override
-            public void onProviderDisabled(String s) {}
+            public void onProviderDisabled(String s)
+            {
+            }
         };
 
         if (Build.VERSION.SDK_INT < 23)
         {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, minTimeUpdate, minDistanceUpdate, locationListener);
+            Location loc = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            onLocationChange(loc);
         }
         else
         {
@@ -73,11 +84,17 @@ public abstract class ActivityWithLocationPermission extends AppCompatActivity
             }
             else
             {
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, minTimeUpdate, minDistanceUpdate, locationListener);
+                Location loc = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                onLocationChange(loc);
             }
         }
     }
 
+    /**
+     * Override to get notified about location
+     * @param location
+     */
     public abstract void onLocationChange(Location location);
 
 }
