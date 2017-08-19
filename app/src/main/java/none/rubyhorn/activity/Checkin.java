@@ -46,7 +46,6 @@ public class Checkin extends ActivityWithLocationPermission
         {
             locationManager.removeUpdates(locationListener);
         }
-
         RestaurantService restaurantService = RestaurantService.Instance(this);
         double latitude = location.getLatitude();
         double longitude = location.getLongitude();
