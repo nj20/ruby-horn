@@ -1,10 +1,8 @@
 package none.rubyhorn.activity;
 
-import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -25,7 +23,7 @@ public class Checkin extends ActivityWithLocationPermission
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_checkin);
+        setContentView(R.layout.checkin);
     }
 
     @Override

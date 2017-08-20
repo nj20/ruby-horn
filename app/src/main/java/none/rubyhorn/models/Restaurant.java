@@ -16,24 +16,27 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import none.rubyhorn.http.HttpRequestQueue;
 
-public class Restaurant
+public class Restaurant implements Serializable
 {
     public String name;
     public String description;
     public double distance;
     public Bitmap restaurantImage;
     public String id;
+    public String url;
 
-    public Restaurant(String id, String name, String description, double distance, Bitmap image)
+    public Restaurant(String id, String name, String description, double distance, Bitmap image, String url)
     {
         this.id = id;
         this.name = name;
         this.description = description;
         this.distance = distance;
         this.restaurantImage = image;
+        this.url = url;
     }
 
     public static void parse(Context context, final JSONObject json, final Response.Listener<Restaurant> listener, final Response.ErrorListener errorListener)
@@ -50,8 +53,9 @@ public class Restaurant
                         String id = json.getString("_id");
                         String name = json.getString("name");
                         String description = json.getString("description");
+                        String url = json.getString("photo");
                         double distance = Double.parseDouble(json.getString("distance"));
-                        listener.onResponse(new Restaurant(id, name, description, distance, restaurantImage));
+                        listener.onResponse(new Restaurant(id, name, description, distance, restaurantImage, url));
                     }catch(Exception e)
                     {
                         errorListener.onErrorResponse(new VolleyError("Exception while converting JSON to resturant"));

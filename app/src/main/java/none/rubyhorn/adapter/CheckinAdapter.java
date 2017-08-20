@@ -33,7 +33,7 @@ public class CheckinAdapter
 
     }
 
-    public void updateRestaurantList(final AppCompatActivity context, Restaurant[] restaurants)
+    public void updateRestaurantList(final AppCompatActivity context, final Restaurant[] restaurants)
     {
         LinearLayout layout = (LinearLayout)context.findViewById(R.id.restaurantList);
         layout.removeAllViews();
@@ -43,7 +43,7 @@ public class CheckinAdapter
             TextView header = restaurant.findViewById(R.id.header);
             TextView description = restaurant.findViewById(R.id.description);
             ImageView image = restaurant.findViewById(R.id.image);
-            restaurant.setTag(restaurants[count].id);
+            restaurant.setTag(restaurants[count]);
             header.setText(restaurants[count].name);
             image.setImageBitmap(restaurants[count].restaurantImage);
             description.setText(restaurants[count].description);
@@ -57,12 +57,12 @@ public class CheckinAdapter
                 @Override
                 public void onClick(View view)
                 {
-
-                    //view.getTag().toString();
-
-                    String restaurantId = view.getTag().toString();
+                    Restaurant restaurant = (Restaurant)view.getTag();
                     Intent intent = new Intent(context, MenuActivity.class);
-                    intent.putExtra(context.getString(R.string.restaurantIdMessage), restaurantId);
+                    intent.putExtra("id", restaurant.id);
+                    intent.putExtra("name", restaurant.name);
+                    intent.putExtra("description", restaurant.description);
+                    intent.putExtra("imageUrl", restaurant.url);
                     context.startActivity(intent);
 
                 }
