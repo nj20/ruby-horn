@@ -47,36 +47,40 @@ public class RestaurantService
         locationHeader.put("accuracy", Double.toString(acc));
         locationHeader.put("range", Double.toString(range));
 
-        this.requestManager.makeRequest(0, url, locationHeader, null, new HttpRequestManager.Listener()
+        this.requestManager.makeRequest(0, url, locationHeader, null, new Response.Listener<JSONObject>()
         {
             @Override
             public void onResponse(JSONObject response)
             {
                 try
                 {
-                   Restaurant.parse(context, response.getJSONArray("body"), new Response.Listener<Restaurant[]>() {
-                       @Override
-                       public void onResponse(Restaurant[] restaurants)
-                       {
+                    Restaurant.parse(context, response.getJSONArray("body"), new Response.Listener<Restaurant[]>()
+                    {
+                        @Override
+                        public void onResponse(Restaurant[] restaurants)
+                        {
                             listener.onResponse(restaurants);
-                       }
-                   }, new Response.ErrorListener()
-                   {
-                       @Override
-                       public void onErrorResponse(VolleyError error)
-                       {
+                        }
+                    }, new Response.ErrorListener()
+                    {
+                        @Override
+                        public void onErrorResponse(VolleyError error)
+                        {
                             errorListener.onErrorResponse(error);
-                       }
-                   });
-                } catch (Exception e)
+                        }
+                    });
+                }
+                catch (Exception e)
                 {
                     errorListener.onErrorResponse(new VolleyError(e.toString()));
                 }
             }
+        }, new Response.ErrorListener()
+        {
             @Override
-            public void onError(JSONObject error)
+            public void onErrorResponse(VolleyError error)
             {
-                errorListener.onErrorResponse(new VolleyError(error.toString()));
+                errorListener.onErrorResponse(error);
             }
         });
     }

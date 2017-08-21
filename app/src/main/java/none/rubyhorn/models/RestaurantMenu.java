@@ -1,7 +1,5 @@
 package none.rubyhorn.models;
 
-import android.util.Log;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -13,7 +11,6 @@ public class RestaurantMenu
 
     public static RestaurantMenu parse(JSONObject json) throws JSONException
     {
-        Log.d("debug", json.toString());
         RestaurantMenu menu = new RestaurantMenu();
         menu.id = json.getString("_id");
         JSONArray sections = json.getJSONArray("sections");

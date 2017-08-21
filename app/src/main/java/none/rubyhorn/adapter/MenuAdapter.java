@@ -1,8 +1,10 @@
 package none.rubyhorn.adapter;
 
 import android.graphics.Bitmap;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -98,10 +100,33 @@ public class MenuAdapter
 
                 TextView price = menuItem.findViewById(R.id.price);
                 price.setText(item.price + "£");
+                menuItem.setOnClickListener(new View.OnClickListener()
+                {
 
+                    @Override
+                    public void onClick(View view)
+                    {
+                        Log.d("DELETE", "ADD");
+                        onMenuItemClick((ConstraintLayout)view);
+                    }
+                });
                 sectionViewLayout.addView(menuItem);
             }
             layout.addView(sectionView);
         }
+    }
+
+    private void onMenuItemClick(ConstraintLayout view)
+    {
+        View counter = view.findViewById(R.id.quantity);
+        counter.setVisibility(View.VISIBLE);
+        View delete = view.findViewById(R.id.deleteButton);
+        delete.setVisibility(View.VISIBLE);
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("DELETE", "DELETE");
+            }
+        });
     }
 }

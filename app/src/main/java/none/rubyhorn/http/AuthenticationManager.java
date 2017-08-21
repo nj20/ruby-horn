@@ -51,19 +51,18 @@ public class AuthenticationManager
      * Sets the session key of the user in preference file. Use this method when the current session key has expired
      * @param listener callback
      */
-    public void setSessionKey(final AuthenticationManager.Listener listener)
+    public void setSessionKey(final Response.Listener<Map<String, String>> listener, final Response.ErrorListener errorListener)
     {
         final String loginURL = context.getString(R.string.host) + "/api/user/login/";
 
         try
         {
-            getUserDetails(new Listener()
+            getUserDetails(new Response.Listener<Map<String, String>>()
             {
                 @Override
                 public void onResponse(Map<String, String> userCredentials)
                 {
                     //After getting user credentials, attempts to login
-                    RequestQueue requestQueue = HttpRequestQueue.Instance(context);
                     JsonObjectRequest postRequest = new JsonObjectRequest(Request.Method.POST, loginURL, new JSONObject(userCredentials),
                     new Response.Listener<JSONObject>()
                     {
@@ -80,12 +79,10 @@ public class AuthenticationManager
                                 editor.putString(context.getString(R.string.savedSessionkey), sessionkey);
                                 editor.commit();
                                 listener.onResponse(result);
-                            } catch (JSONException e)
+                            }
+                            catch (JSONException e)
                             {
-                                Map<String, String> error = new HashMap<>();
-                                error.put("statusCode", "500");
-                                error.put("error", "Invalid structure returned");
-                                listener.onError(error);
+                                errorListener.onErrorResponse(new VolleyError(e.toString()));
                             }
                         }
                     },
@@ -97,40 +94,34 @@ public class AuthenticationManager
                             NetworkResponse networkResponse = error.networkResponse;
                             //If responds with user not found, this means that the user has been deleted
                             //We must remove the currently saved user so that we can generate a new user
-                            if(networkResponse.statusCode == 404)
+                            if (networkResponse.statusCode == 404)
                             {
                                 SharedPreferences.Editor editor = sharedPref.edit();
                                 editor.remove(context.getString(R.string.savedUserid));
                                 editor.remove(context.getString(R.string.savedUserpassword));
                                 editor.commit();
-                                setSessionKey(listener);
+                                setSessionKey(listener, errorListener);
                             }
                             else
                             {
-                                String jsonError = new String(networkResponse.data);
-                                Map<String, String> err = new HashMap<>();
-                                err.put("error", jsonError);
-                                err.put("statusCode", "" + networkResponse.statusCode);
-                                listener.onError(err);
+                                errorListener.onErrorResponse(error);
                             }
                         }
                     });
-                    requestQueue.add(postRequest);
+                    HttpRequestQueue.Instance(context).add(postRequest);
                 }
-                //If getUserDetails return with error
+            }, new Response.ErrorListener()
+            {
                 @Override
-                public void onError(Map<String, String> error)
+                public void onErrorResponse(VolleyError error)
                 {
-                    listener.onError(error);
+                    errorListener.onErrorResponse(error);
                 }
             });
         }
         catch (JSONException e)
         {
-            Map<String, String> error = new HashMap<>();
-            error.put("statusCode", "500");
-            error.put("error", "Invalid structure returned");
-            listener.onError(error);
+            errorListener.onErrorResponse(new VolleyError(e.toString()));
         }
 
     }
@@ -140,7 +131,7 @@ public class AuthenticationManager
      * @param listener callback
      * @throws JSONException
      */
-    public void getUserDetails(final AuthenticationManager.Listener listener) throws JSONException
+    public void getUserDetails(final Response.Listener<Map<String, String>> listener, final Response.ErrorListener errorListener) throws JSONException
     {
         final Map<String, String> userDetails = new HashMap<>();
 
@@ -167,8 +158,6 @@ public class AuthenticationManager
             body.put("password", generatedPassword);
             body.put("type", "0");
 
-            RequestQueue requestQueue = HttpRequestQueue.Instance(context);
-
             //Requesting to register a new user
             JsonObjectRequest postRequest = new JsonObjectRequest(Request.Method.POST, registerURL, new JSONObject(body),
             //If successfully registers, we store the newly generated userid and password
@@ -190,19 +179,10 @@ public class AuthenticationManager
                 @Override
                 public void onErrorResponse(VolleyError error)
                 {
-                    NetworkResponse networkResponse = error.networkResponse;
-                    if (networkResponse != null && networkResponse.data != null)
-                    {
-                        String jsonError = new String(networkResponse.data);
-                        Map<String, String> err = new HashMap<>();
-                        err.put("error", jsonError);
-                        err.put("statusCode", "" + networkResponse.statusCode);
-                        listener.onError(err);
-                    }
-
+                    errorListener.onErrorResponse(error);
                 }
             });
-            requestQueue.add(postRequest);
+            HttpRequestQueue.Instance(context).add(postRequest);
 
         }
         else
@@ -211,14 +191,5 @@ public class AuthenticationManager
             userDetails.put("password", password);
             listener.onResponse(userDetails);
         }
-
     }
-
-    public interface Listener
-    {
-        void onResponse(Map<String, String> data);
-
-        void onError(Map<String, String> error);
-    }
-
 }

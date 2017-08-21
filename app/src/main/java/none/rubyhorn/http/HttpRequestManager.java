@@ -10,8 +10,6 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-
-import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
@@ -41,13 +39,10 @@ public class HttpRequestManager
 
     private SharedPreferences sharedPref;
 
-    private RequestQueue requestQueue;
-
     private HttpRequestManager(Context context)
     {
         this.context = context;
         sharedPref = context.getSharedPreferences(context.getString(R.string.credentialsFile), context.MODE_PRIVATE);
-        requestQueue = HttpRequestQueue.Instance(context);
     }
 
     /**
@@ -58,7 +53,7 @@ public class HttpRequestManager
      * @param body
      * @param listener
      */
-    public void makeRequest(final int method, final String url, final Map<String, String> headers, final JSONObject body, final HttpRequestManager.Listener listener)
+    public void makeRequest(final int method, final String url, final Map<String, String> headers, final JSONObject body, final Response.Listener<JSONObject> listener, final Response.ErrorListener errorListener)
     {
         //Making the request
         JsonObjectRequest getRequest = new JsonObjectRequest(method, url, body,
@@ -68,6 +63,7 @@ public class HttpRequestManager
             @Override
             public void onResponse(JSONObject response)
             {
+                Log.d("innerResponse", response.toString());
                 listener.onResponse(response);
             }
         },
@@ -81,19 +77,19 @@ public class HttpRequestManager
                 if(networkResponse.statusCode == 401)
                 {
                     //Generate new session key
-                    AuthenticationManager.Instance(context).setSessionKey(new AuthenticationManager.Listener()
-                    {
+                    AuthenticationManager.Instance(context).setSessionKey(new Response.Listener<Map<String, String>>() {
                         //After generating new session key, we retry the request
                         @Override
-                        public void onResponse(Map<String, String> data)
-                        {
-                            makeRequest(method, url, headers, body, listener);
+                        public void onResponse(Map<String, String> data) {
+                            makeRequest(method, url, headers, body, listener, errorListener);
                         }
 
+                    }, new Response.ErrorListener()
+                    {
                         @Override
-                        public void onError(Map<String, String> error)
+                        public void onErrorResponse(VolleyError error)
                         {
-                            listener.onError(new JSONObject(error));
+                            errorListener.onErrorResponse(error);
                         }
                     });
                 }
@@ -103,7 +99,7 @@ public class HttpRequestManager
                     Map<String, String> err = new HashMap<>();
                     err.put("error", jsonError);
                     err.put("statusCode", "" + networkResponse.statusCode);
-                    listener.onError(new JSONObject(err));
+                    errorListener.onErrorResponse(error);
                 }
             }
         })
@@ -122,17 +118,10 @@ public class HttpRequestManager
                 // and the error handler will automatically generate a new session key and store it
                 String sessionkey = sharedPref.getString(context.getString(R.string.savedSessionkey), "default");
                 h.put("sessionkey", sessionkey);
+                Log.d("header", h.toString());
                 return h;
             }
         };
-        requestQueue.add(getRequest);
+        HttpRequestQueue.Instance(context).add(getRequest);
     }
-
-    public interface Listener
-    {
-        void onResponse(JSONObject response);
-
-        void onError(JSONObject error);
-    }
-
 }

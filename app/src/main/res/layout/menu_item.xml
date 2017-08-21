@@ -55,13 +55,32 @@
 
     <TextView
         android:id="@+id/quantity"
-        android:layout_width="wrap_content"
+        android:layout_width="20dp"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         android:layout_marginTop="0dp"
         android:text="x1"
-        android:textColor="@android:color/holo_blue_dark"
-        app:layout_constraintTop_toTopOf="@+id/name"
-        android:layout_marginLeft="16dp"
-        app:layout_constraintLeft_toLeftOf="parent" />
+        android:textAlignment="center"
+        android:textColor="@color/colorPrimary"
+        android:textColorLink="@color/colorAccent"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/name"
+        app:layout_constraintTop_toTopOf="@+id/name" />
+
+    <ImageView
+        android:id="@+id/deleteButton"
+        android:layout_width="20dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="4dp"
+        android:visibility="invisible"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/description"
+        app:layout_constraintTop_toBottomOf="@+id/quantity"
+        app:srcCompat="@drawable/negative" />
 
 </android.support.constraint.ConstraintLayout>

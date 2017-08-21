@@ -46,24 +46,26 @@ public class MenuService
         String url = context.getString(R.string.host) + "/api/menu";
         Map<String, String> headers = new HashMap<>();
         headers.put("restaurantid", id);
-        requestManager.makeRequest(Request.Method.GET, url, headers, null, new HttpRequestManager.Listener()
+        requestManager.makeRequest(Request.Method.GET, url, headers, null, new Response.Listener<JSONObject>()
         {
             @Override
             public void onResponse(JSONObject response)
             {
                 try
                 {
+                    Log.d("response", response.toString());
                     listener.onResponse(RestaurantMenu.parse(response.getJSONObject("body")));
                 } catch (JSONException e)
                 {
                     errorListener.onErrorResponse(new VolleyError(response.toString()));
                 }
             }
-
+        }, new Response.ErrorListener()
+        {
             @Override
-            public void onError(JSONObject error)
+            public void onErrorResponse(VolleyError error)
             {
-                errorListener.onErrorResponse(new VolleyError(error.toString()));
+                errorListener.onErrorResponse(error);
             }
         });
     }

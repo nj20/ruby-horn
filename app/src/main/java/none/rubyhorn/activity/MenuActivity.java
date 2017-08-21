@@ -3,6 +3,8 @@ package none.rubyhorn.activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+
 import none.rubyhorn.adapter.MenuAdapter;
 
 import com.android.volley.Response;
@@ -19,13 +21,18 @@ public class MenuActivity extends AppCompatActivity {
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.menu);
+    }
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
         Intent intent = getIntent();
 
         String restaurantId = intent.getExtras().getString("id");
         final String restaurantName = intent.getExtras().getString("name");
         final String restaurantDescription = intent.getExtras().getString("description");
         final String restaurantImageUrl = intent.getExtras().getString("imageUrl");
-
         MenuService.Instance(this).getMenuById(restaurantId, new Response.Listener<RestaurantMenu>()
         {
             @Override
