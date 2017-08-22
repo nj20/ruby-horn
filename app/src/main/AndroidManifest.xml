@@ -14,6 +14,7 @@
         android:theme="@style/AppTheme.NoTitle">
         <activity
             android:name=".activity.Checkin"
+            android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme.NoTitle">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,7 +22,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.MenuActivity"></activity>
+        <activity
+            android:name=".activity.MenuActivity"
+            android:configChanges="orientation|screenSize"></activity>
     </application>
 
 </manifest>

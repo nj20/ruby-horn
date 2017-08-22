@@ -59,7 +59,7 @@ public class CheckinAdapter
                 {
                     Restaurant restaurant = (Restaurant)view.getTag();
                     Intent intent = new Intent(context, MenuActivity.class);
-                    intent.putExtra("id", restaurant.id);
+                    intent.putExtra("restaurantId", restaurant.id);
                     intent.putExtra("name", restaurant.name);
                     intent.putExtra("description", restaurant.description);
                     intent.putExtra("imageUrl", restaurant.url);

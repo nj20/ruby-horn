@@ -6,13 +6,13 @@ import org.json.JSONObject;
 
 public class RestaurantMenu
 {
-    public String id;
+    public String restaurantId;
     public MenuSection[] sections;
 
     public static RestaurantMenu parse(JSONObject json) throws JSONException
     {
         RestaurantMenu menu = new RestaurantMenu();
-        menu.id = json.getString("_id");
+        menu.restaurantId = json.getString("_id");
         JSONArray sections = json.getJSONArray("sections");
 
         MenuSection[] parsedSections = new MenuSection[sections.length()];
