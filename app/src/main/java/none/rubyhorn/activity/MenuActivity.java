@@ -54,16 +54,16 @@ public class MenuActivity extends AppCompatActivity {
 
     private void clearMenu()
     {
-        MenuAdapter.Instance().clearMenu(this);
+        MenuAdapter.Instance(this).clearMenu();
     }
 
     private void updateMenuHeader(String restaurantName, String restaurantDescription, String restaurantImage)
     {
-        MenuAdapter.Instance().updateMenuHeader(this, restaurantName, restaurantDescription, restaurantImage);
+        MenuAdapter.Instance(this).updateMenuHeader(restaurantName, restaurantDescription, restaurantImage);
     }
 
     private void updateMenu(RestaurantMenu menu)
     {
-        MenuAdapter.Instance().updateMenu(this, menu);
+        MenuAdapter.Instance(this).updateMenu(menu);
     }
 }

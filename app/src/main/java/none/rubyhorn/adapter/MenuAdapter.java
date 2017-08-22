@@ -1,11 +1,14 @@
 package none.rubyhorn.adapter;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -24,22 +27,29 @@ public class MenuAdapter
 {
     private static MenuAdapter instance;
 
-    public static MenuAdapter Instance()
+    public static MenuAdapter Instance(AppCompatActivity context)
     {
         if(instance == null)
         {
-            instance = new MenuAdapter();
+            instance = new MenuAdapter(context);
         }
         return instance;
     }
 
-    public void clearMenu(AppCompatActivity context)
+    private AppCompatActivity context;
+
+    private MenuAdapter(AppCompatActivity context)
+    {
+        this.context = context;
+    }
+
+    public void clearMenu()
     {
         LinearLayout layout = (LinearLayout)context.findViewById(R.id.menuLayout);
         layout.removeAllViews();;
     }
 
-    public void updateMenuHeader(final AppCompatActivity context, final String restaurantName, final String restaurantDescription, String restaurantImage)
+    public void updateMenuHeader(final String restaurantName, final String restaurantDescription, String restaurantImage)
     {
         ImageRequest request = new ImageRequest(restaurantImage, new Response.Listener<Bitmap>()
         {
@@ -71,7 +81,7 @@ public class MenuAdapter
         HttpRequestQueue.Instance(context).add(request);
     }
 
-    public void updateMenu(AppCompatActivity context, RestaurantMenu menu)
+    public void updateMenu(RestaurantMenu menu)
     {
         LinearLayout layout = (LinearLayout)context.findViewById(R.id.menuLayout);
 
@@ -106,7 +116,6 @@ public class MenuAdapter
                     @Override
                     public void onClick(View view)
                     {
-                        Log.d("DELETE", "ADD");
                         onMenuItemClick((ConstraintLayout)view);
                     }
                 });
@@ -118,15 +127,36 @@ public class MenuAdapter
 
     private void onMenuItemClick(ConstraintLayout view)
     {
-        View counter = view.findViewById(R.id.quantity);
+        final TextView counter = view.findViewById(R.id.quantity);
         counter.setVisibility(View.VISIBLE);
-        View delete = view.findViewById(R.id.deleteButton);
+        incrementCounter(counter);
+        Animation animation = AnimationUtils.loadAnimation(context, R.anim.text_pop);
+        animation.reset();
+        counter.clearAnimation();;
+        counter.startAnimation(animation);
+
+        final View delete = view.findViewById(R.id.deleteButton);
         delete.setVisibility(View.VISIBLE);
-        delete.setOnClickListener(new View.OnClickListener() {
+        delete.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View view) {
-                Log.d("DELETE", "DELETE");
+            public void onClick(View view)
+            {
+               counter.setVisibility(View.INVISIBLE);
+                resetCounter(counter);
+                delete.setVisibility(View.INVISIBLE);
             }
         });
+    }
+
+    private void incrementCounter(TextView counter)
+    {
+        int numberOfItems = Integer.parseInt(counter.getText().toString().substring(1)) + 1;
+        counter.setText("x" + numberOfItems);
+    }
+
+    private void resetCounter(TextView counter)
+    {
+        counter.setText("x0");
     }
 }
