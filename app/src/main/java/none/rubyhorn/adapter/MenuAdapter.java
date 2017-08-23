@@ -107,22 +107,31 @@ public class MenuAdapter
 
         for(int itemCount = 0; itemCount < section.items.length; itemCount++)
         {
-            View menuItemView = View.inflate(context, R.layout.menu_item, null);
             MenuItem item = section.items[itemCount];
-            updateMenuItem(context, menuItemView, item, order.items.get(item.id), onAdd, onDelete);
+            View menuItemView = updateMenuItem(context, item, order.items.get(item.id), onAdd, onDelete);
             sectionViewLayout.addView(menuItemView);
         }
     }
 
-    private void updateMenuItem(final AppCompatActivity context, View menuItemView, MenuItem item, Integer quantity, final Response.Listener<String> onAdd, final Response.Listener<String> onDelete)
+    private View updateMenuItem(final AppCompatActivity context, MenuItem item, Integer quantity, final Response.Listener<String> onAdd, final Response.Listener<String> onDelete)
     {
+        View menuItemView = null;
+        if(item.description.trim().equals(""))
+        {
+            menuItemView = View.inflate(context, R.layout.menu_item_no_description, null);
+        }
+        else
+        {
+            menuItemView = View.inflate(context, R.layout.menu_item, null);
+        }
         menuItemView.setTag(item.id);
 
         TextView itemName = menuItemView.findViewById(R.id.name);
         itemName.setText(item.name);
 
         TextView description = menuItemView.findViewById(R.id.description);
-        description.setText(item.description);
+        if(description != null)
+            description.setText(item.description);
 
         TextView price = menuItemView.findViewById(R.id.price);
         price.setText(item.price + "£");
@@ -146,6 +155,7 @@ public class MenuAdapter
                 onMenuItemClick(context, (ConstraintLayout)view, onDelete);
             }
         });
+        return menuItemView;
     }
 
     private void onMenuItemClick(final AppCompatActivity context, ConstraintLayout view, final Response.Listener<String> onDelete)
