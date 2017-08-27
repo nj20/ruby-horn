@@ -2,12 +2,8 @@ package none.rubyhorn.models;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.Rect;
-import android.graphics.RectF;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.widget.ImageView;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -16,11 +12,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
 import none.rubyhorn.http.HttpRequestQueue;
 
-public class Restaurant implements Serializable
+public class Restaurant implements Parcelable
 {
     public String name;
     public String description;
@@ -38,6 +33,27 @@ public class Restaurant implements Serializable
         this.restaurantImage = image;
         this.url = url;
     }
+
+    public Restaurant(Parcel in)
+    {
+        this.id = in.readString();
+        this.name = in.readString();
+        this.description = in.readString();
+        this.distance = in.readDouble();
+        this.url =  in.readString();
+    }
+
+    public static final Creator<Restaurant> CREATOR = new Creator<Restaurant>() {
+        @Override
+        public Restaurant createFromParcel(Parcel in) {
+            return new Restaurant(in);
+        }
+
+        @Override
+        public Restaurant[] newArray(int size) {
+            return new Restaurant[size];
+        }
+    };
 
     public static void parse(Context context, final JSONObject json, final Response.Listener<Restaurant> listener, final Response.ErrorListener errorListener)
     {
@@ -109,5 +125,21 @@ public class Restaurant implements Serializable
     {
         ImageRequest request = new ImageRequest(url, listener, 10000, 10000, ImageView.ScaleType.CENTER_CROP, null, errorListener);
         HttpRequestQueue.Instance(context).add(request);
+    }
+
+    @Override
+    public int describeContents()
+    {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i)
+    {
+        parcel.writeString(id);
+        parcel.writeString(name);
+        parcel.writeString(description);
+        parcel.writeDouble(distance);
+        parcel.writeString(url);
     }
 }

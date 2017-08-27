@@ -1,5 +1,6 @@
 package none.rubyhorn.activity;
 
+import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,9 +10,9 @@ import com.android.volley.VolleyError;
 
 import none.rubyhorn.R;
 import none.rubyhorn.activity.template.ActivityWithLocationPermission;
-import none.rubyhorn.adapter.CheckinAdapter;
 import none.rubyhorn.models.Restaurant;
 import none.rubyhorn.service.RestaurantService;
+import none.rubyhorn.views.RestaurantListView;
 
 /**
  * The first activity that happens.
@@ -19,6 +20,8 @@ import none.rubyhorn.service.RestaurantService;
  */
 public class Checkin extends ActivityWithLocationPermission
 {
+    private RestaurantListView restaurantListView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -57,7 +60,7 @@ public class Checkin extends ActivityWithLocationPermission
             @Override
             public void onResponse(Restaurant[] restaurants)
             {
-                updateRestaurants(restaurants);
+                addRestaurantList(restaurants);
             }
         }, new Response.ErrorListener()
         {
@@ -69,10 +72,23 @@ public class Checkin extends ActivityWithLocationPermission
         });
     }
 
-    private void updateRestaurants(Restaurant[] restaurants)
+    private void addRestaurantList(Restaurant[] restaurants)
     {
-        CheckinAdapter checkinAdapter = CheckinAdapter.Instance();
-        checkinAdapter.updateRestaurantList(this, restaurants);
+        restaurantListView = new RestaurantListView(this, restaurants, new Response.Listener<Restaurant>()
+        {
+            @Override
+            public void onResponse(Restaurant restaurant)
+            {
+                showMenuActivity(restaurant);
+            }
+        });
+    }
+
+    private void showMenuActivity(Restaurant restaurant)
+    {
+        Intent intent = new Intent(this, MenuActivity.class);
+        MenuActivity.setRestaurant(restaurant);
+        startActivity(intent);
     }
 }
 
