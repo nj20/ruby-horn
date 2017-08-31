@@ -24,7 +24,12 @@
         </activity>
         <activity
             android:name=".activity.MenuActivity"
-            android:configChanges="orientation|screenSize"></activity>
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name=".activity.Confirmation"
+            android:configChanges="orientation|screenSize"
+            >
+        </activity>
     </application>
 
 </manifest>

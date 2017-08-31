@@ -19,12 +19,12 @@ public class MenuView
     TextView totalQuantity;
     TextView totalPrice;
 
-    public MenuView(AppCompatActivity context, Restaurant restaurant, RestaurantMenu menu, Order order, Response.Listener<MenuItem> onAdd, Response.Listener<MenuItem> onDelete)
+    public MenuView(AppCompatActivity context, Restaurant restaurant, RestaurantMenu menu, Order order, Response.Listener<MenuItem> onAdd, Response.Listener<MenuItem> onDelete, Response.Listener onCheckout)
     {
         clearMenu(context);
         setMenuHeader(context, restaurant);
         setMenu(context, menu, order, onAdd, onDelete);
-        updateCheckoutButton(context, order);
+        updateCheckoutButton(context, order, onCheckout);
     }
 
     private void clearMenu(final AppCompatActivity context)
@@ -69,7 +69,7 @@ public class MenuView
 
         //Setting section header
         View sectionHeaderView = View.inflate(context, R.layout.menu_section_header, null);
-        TextView sectinoHeaderText = sectionHeaderView.findViewById(R.id.sectionHeader);
+        TextView sectinoHeaderText = sectionHeaderView.findViewById(R.id.tableNumberHeader);
         sectinoHeaderText.setText(section.name);
         sectionViewLayout.addView(sectionHeaderView);
 
@@ -83,15 +83,20 @@ public class MenuView
 
     private View setMenuItem(final AppCompatActivity context, MenuItem item, Integer quantity, final Response.Listener<MenuItem> onAdd, final Response.Listener<MenuItem> onDelete)
     {
-        MenuItemView menuItemView = new MenuItemView(context, item, onAdd, onDelete);
+        MenuItemView menuItemView = new MenuItemView(context, item, onAdd, onDelete, true);
 
         if(quantity != null)
-            menuItemView.setQuantity(quantity);
+            menuItemView.setQuantity(quantity, true);
 
         return menuItemView.getView();
     }
 
     public void updateCheckoutButton(AppCompatActivity context, Order order)
+    {
+        updateCheckoutButton(context, order, null);
+    }
+
+    private void updateCheckoutButton(AppCompatActivity context, Order order, final Response.Listener onCheckout)
     {
         ConstraintLayout checkout = (ConstraintLayout) context.findViewById(R.id.checkout);
 
@@ -112,5 +117,17 @@ public class MenuView
 
         totalQuantity.setText(order.totalQuantity + "");
         totalPrice.setText(order.totalPrice + "£");
+
+        if(onCheckout != null)
+        {
+            checkout.findViewById(R.id.checkoutButton).setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View view)
+                {
+                    onCheckout.onResponse(null);
+                }
+            });
+        }
     }
 }

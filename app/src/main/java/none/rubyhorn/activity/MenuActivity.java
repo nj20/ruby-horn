@@ -1,10 +1,9 @@
 package none.rubyhorn.activity;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import none.rubyhorn.R;
@@ -27,7 +26,12 @@ public class MenuActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.menu);
+    }
 
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
         MenuService.Instance(this).getMenuById(restaurant.id, new Response.Listener<RestaurantMenu>()
         {
             @Override
@@ -48,7 +52,7 @@ public class MenuActivity extends AppCompatActivity
     }
 
 
-    private void setMenuView(Restaurant restaurant, RestaurantMenu menu, final Order order)
+    private void setMenuView(final Restaurant restaurant, final RestaurantMenu menu, final Order order)
     {
         final AppCompatActivity instance = this;
         menuView = new MenuView(this, restaurant, menu, order,
@@ -58,7 +62,7 @@ public class MenuActivity extends AppCompatActivity
             public void onResponse(MenuItem item)
             {
                 Integer quantity = order.items.get(item.id);
-                if(quantity == null)
+                if (quantity == null)
                 {
                     order.items.put(item.id, 1);
                 }
@@ -82,6 +86,18 @@ public class MenuActivity extends AppCompatActivity
                 order.totalQuantity -= quantity;
                 menuView.updateCheckoutButton(instance, order);
             }
+        },
+        new Response.Listener()
+        {
+            @Override
+            public void onResponse(Object response)
+            {
+                Confirmation.restaurant = restaurant;
+                Confirmation.order = order;
+                Confirmation.menu = menu;
+                Intent intent = new Intent(instance, Confirmation.class);
+                instance.startActivity(intent);
+            }
         });
     }
 
@@ -100,9 +116,9 @@ public class MenuActivity extends AppCompatActivity
     }
 
     @Override
-    public void onDestroy()
+    public void onPause()
     {
-        super.onDestroy();
+        super.onPause();
         SharedPreferences sharedPref = getApplicationContext().getSharedPreferences(getString(R.string.orderFile), MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString(menu.restaurantId, order.toString());

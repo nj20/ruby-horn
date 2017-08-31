@@ -15,9 +15,9 @@ public class MenuItemView
     private View menuItemView;
     private int quantity;
 
-    public MenuItemView(AppCompatActivity context, MenuItem item, final Response.Listener<MenuItem> onAdd, final Response.Listener<MenuItem> onDelete)
+    public MenuItemView(AppCompatActivity context, MenuItem item, final Response.Listener<MenuItem> onAdd, final Response.Listener<MenuItem> onDelete, boolean showDescription)
     {
-        if(item.description.trim().equals(""))
+        if(item.description.trim().equals("") || !showDescription)
         {
             menuItemView = View.inflate(context, R.layout.menu_item_no_description, null);
         }
@@ -35,7 +35,7 @@ public class MenuItemView
             description.setText(item.description);
 
         TextView price = menuItemView.findViewById(R.id.price);
-        price.setText(item.price + "£");
+        price.setText("£" + item.price);
 
         final MenuItemView instance = this;
         menuItemView.setOnClickListener(new View.OnClickListener()
@@ -43,8 +43,11 @@ public class MenuItemView
             @Override
             public void onClick(View view)
             {
-                instance.incrementQuantity();
-                onAdd.onResponse((MenuItem)instance.getView().getTag());
+                if(onAdd != null)
+                {
+                    instance.incrementQuantity();
+                    onAdd.onResponse((MenuItem)instance.getView().getTag());
+                }
             }
         });
 
@@ -55,8 +58,11 @@ public class MenuItemView
             @Override
             public void onClick(View view)
             {
-                instance.resetQuantity();
-                onDelete.onResponse((MenuItem)instance.getView().getTag());
+                if(onDelete != null)
+                {
+                    instance.resetQuantity();
+                    onDelete.onResponse((MenuItem)instance.getView().getTag());
+                }
             }
         });
     }
@@ -67,16 +73,16 @@ public class MenuItemView
         Animation appear = AnimationUtils.loadAnimation(context, R.anim.view_pop);
         View quantityView = menuItemView.findViewById(R.id.quantity);
         playAnimation(quantityView, appear);
-        setQuantity(quantity + 1);
+        setQuantity(quantity + 1, true);
     }
 
     public void resetQuantity()
     {
-        setQuantity(0);
+        setQuantity(0, true);
     }
 
 
-    public void setQuantity(int quantity)
+    public void setQuantity(int quantity, boolean showDeleteButton)
     {
         this.quantity = quantity;
         TextView counter = menuItemView.findViewById(R.id.quantity);
@@ -84,7 +90,9 @@ public class MenuItemView
 
         if(quantity > 0)
         {
-            delete.setVisibility(View.VISIBLE);
+            if(showDeleteButton)
+                delete.setVisibility(View.VISIBLE);
+
             counter.setVisibility(View.VISIBLE);
             counter.setText("x" + quantity);
         }

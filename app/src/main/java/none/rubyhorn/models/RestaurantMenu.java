@@ -39,4 +39,20 @@ public class RestaurantMenu
         menu.sections = parsedSections;
         return menu;
     }
+
+    public MenuItem getItem(String id)
+    {
+        for(int sectionCount = 0; sectionCount < sections.length; sectionCount++)
+        {
+            for(int itemCount = 0; itemCount < sections[sectionCount].items.length; itemCount++)
+            {
+                MenuItem item = sections[sectionCount].items[itemCount];
+                if(item.id.equals(id))
+                {
+                    return item;
+                }
+            }
+        }
+        return null;
+    }
 }
