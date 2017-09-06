@@ -17,6 +17,7 @@ import none.rubyhorn.views.ConfirmationView;
 public class Confirmation extends AppCompatActivity
 {
     public static Restaurant restaurant;
+    public static String tableNumber;
     public static RestaurantMenu menu;
     public static Order order;
 
@@ -32,7 +33,7 @@ public class Confirmation extends AppCompatActivity
 
     private void setConfirmationPage()
     {
-        view = new ConfirmationView(this, menu, order,
+        view = new ConfirmationView(this, menu, order, tableNumber,
         new Response.Listener<MenuItem>()
         {
             @Override

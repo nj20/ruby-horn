@@ -19,11 +19,12 @@ public class ConfirmationView
     private AppCompatActivity context;
     private RestaurantMenu menu;
     private Order order;
+    private String tableNumber;
     private Response.Listener<MenuItem> onAddItem;
     private Response.Listener<MenuItem> onDeleteItem;
     private Response.Listener onConfirm;
 
-    public ConfirmationView(AppCompatActivity context, RestaurantMenu menu, Order order, Response.Listener<MenuItem> onAddItem, Response.Listener<MenuItem> onDeleteItem, Response.Listener onConfirm)
+    public ConfirmationView(AppCompatActivity context, RestaurantMenu menu, Order order, String tableNumber, Response.Listener<MenuItem> onAddItem, Response.Listener<MenuItem> onDeleteItem, Response.Listener onConfirm)
     {
         this.context = context;
         this.menu = menu;
@@ -31,6 +32,7 @@ public class ConfirmationView
         this.onAddItem = onAddItem;
         this.onDeleteItem = onDeleteItem;
         this.onConfirm = onConfirm;
+        this.tableNumber = tableNumber;
 
         setBackButton();
         setConfirmationList();
@@ -44,7 +46,7 @@ public class ConfirmationView
         layout.removeAllViews();
         View sectionHeaderView = View.inflate(context, R.layout.menu_section_header, null);
         TextView sectinoHeaderText = sectionHeaderView.findViewById(R.id.tableNumberHeader);
-        sectinoHeaderText.setText("Table Number: 5");
+        sectinoHeaderText.setText("Table Number: " + tableNumber);
         layout.addView(sectionHeaderView);
 
         for (String itemId : order.items.keySet())

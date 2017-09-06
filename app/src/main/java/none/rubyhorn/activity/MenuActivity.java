@@ -1,9 +1,16 @@
 package none.rubyhorn.activity;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
+
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import none.rubyhorn.R;
@@ -17,6 +24,7 @@ import none.rubyhorn.views.MenuView;
 public class MenuActivity extends AppCompatActivity
 {
     private Order order;
+    private String tableNumber;
     private RestaurantMenu menu;
     private MenuView menuView;
     private static Restaurant restaurant;
@@ -26,6 +34,7 @@ public class MenuActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.menu);
+        showTableNumberForm();
     }
 
     @Override
@@ -51,6 +60,35 @@ public class MenuActivity extends AppCompatActivity
         });
     }
 
+    private void showTableNumberForm()
+    {
+        final MenuActivity instance = this;
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(MenuActivity.this);
+        final View view = getLayoutInflater().inflate(R.layout.menu_tablenumber, null);
+        dialogBuilder.setView(view);
+        dialogBuilder.setCancelable(false);
+        dialogBuilder.setPositiveButton(R.string.checkIn, new DialogInterface.OnClickListener()
+        {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i)
+            {
+                EditText tableNumberField = view.findViewById(R.id.tableNumberField);
+                String tableNumber = tableNumberField.getText().toString();
+                if(tableNumber.equals(""))
+                {
+                    instance.finish();
+                }
+                else
+                {
+                    instance.tableNumber = tableNumber;
+                }
+            }
+        });
+
+        dialogBuilder.create();
+        dialogBuilder.show();
+
+    }
 
     private void setMenuView(final Restaurant restaurant, final RestaurantMenu menu, final Order order)
     {
@@ -95,6 +133,7 @@ public class MenuActivity extends AppCompatActivity
                 Confirmation.restaurant = restaurant;
                 Confirmation.order = order;
                 Confirmation.menu = menu;
+                Confirmation.tableNumber = tableNumber;
                 Intent intent = new Intent(instance, Confirmation.class);
                 instance.startActivity(intent);
             }
