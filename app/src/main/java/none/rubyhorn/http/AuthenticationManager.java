@@ -108,7 +108,7 @@ public class AuthenticationManager
                             }
                         }
                     });
-                    HttpRequestQueue.Instance(context).add(postRequest);
+                    HttpRequestQueue.Instance(context).add(postRequest, false);
                 }
             }, new Response.ErrorListener()
             {
@@ -182,7 +182,7 @@ public class AuthenticationManager
                     errorListener.onErrorResponse(error);
                 }
             });
-            HttpRequestQueue.Instance(context).add(postRequest);
+            HttpRequestQueue.Instance(context).add(postRequest, false);
 
         }
         else

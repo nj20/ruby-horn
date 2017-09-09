@@ -122,6 +122,6 @@ public class HttpRequestManager
                 return h;
             }
         };
-        HttpRequestQueue.Instance(context).add(getRequest);
+        HttpRequestQueue.Instance(context).add(getRequest, false);
     }
 }

@@ -26,9 +26,9 @@ public class HttpRequestQueue
         requestQueue = Volley.newRequestQueue(context);
     }
 
-    public void add(Request request)
+    public void add(Request request, boolean cache)
     {
-        request.setShouldCache(false);
+        request.setShouldCache(cache);
         requestQueue.add(request);
     }
 }

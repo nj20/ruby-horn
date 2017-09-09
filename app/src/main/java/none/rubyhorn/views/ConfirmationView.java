@@ -5,6 +5,7 @@ import none.rubyhorn.models.MenuItem;
 
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -38,13 +39,14 @@ public class ConfirmationView
         setConfirmationList();
         setEditButton();
         updateOrderTotal();
+        setPayButton();
     }
 
     private void setConfirmationList()
     {
         LinearLayout layout = (LinearLayout)context.findViewById(R.id.layout);
         layout.removeAllViews();
-        View sectionHeaderView = View.inflate(context, R.layout.menu_section_header, null);
+        View sectionHeaderView = View.inflate(context, R.layout.confirmation_table_number, null);
         TextView sectinoHeaderText = sectionHeaderView.findViewById(R.id.tableNumberHeader);
         sectinoHeaderText.setText("Table Number: " + tableNumber);
         layout.addView(sectionHeaderView);
@@ -90,6 +92,19 @@ public class ConfirmationView
             {
                 editing = !editing;
                 setConfirmationList();
+            }
+        });
+    }
+
+    private void setPayButton()
+    {
+        Button payButton = (Button)context.findViewById(R.id.payButton);
+        payButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                onConfirm.onResponse(null);
             }
         });
     }

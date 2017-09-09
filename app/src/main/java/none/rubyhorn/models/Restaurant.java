@@ -124,7 +124,7 @@ public class Restaurant implements Parcelable
     private static void downloadImage(String url, Response.Listener<Bitmap> listener, Response.ErrorListener errorListener, Context context) throws IOException
     {
         ImageRequest request = new ImageRequest(url, listener, 10000, 10000, ImageView.ScaleType.CENTER_CROP, null, errorListener);
-        HttpRequestQueue.Instance(context).add(request);
+        HttpRequestQueue.Instance(context).add(request, true);
     }
 
     @Override

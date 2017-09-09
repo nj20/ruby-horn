@@ -27,9 +27,11 @@
             android:configChanges="orientation|screenSize" />
         <activity
             android:name=".activity.Confirmation"
-            android:configChanges="orientation|screenSize"
-            >
-        </activity>
+            android:configChanges="orientation|screenSize"></activity>
+        <activity
+            android:name=".activity.WaitActivity"
+            android:label="@string/title_activity_wait"
+            android:theme="@style/AppTheme.NoTitle"></activity>
     </application>
 
 </manifest>

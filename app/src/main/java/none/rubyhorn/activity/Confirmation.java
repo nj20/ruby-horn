@@ -13,6 +13,7 @@ import none.rubyhorn.models.Order;
 import none.rubyhorn.models.Restaurant;
 import none.rubyhorn.models.RestaurantMenu;
 import none.rubyhorn.views.ConfirmationView;
+import none.rubyhorn.views.WaitView;
 
 public class Confirmation extends AppCompatActivity
 {
@@ -33,6 +34,7 @@ public class Confirmation extends AppCompatActivity
 
     private void setConfirmationPage()
     {
+        final Confirmation instance = this;
         view = new ConfirmationView(this, menu, order, tableNumber,
         new Response.Listener<MenuItem>()
         {
@@ -70,7 +72,13 @@ public class Confirmation extends AppCompatActivity
             @Override
             public void onResponse(Object response)
             {
-
+                WaitActivity.menu = menu;
+                WaitActivity.order = order;
+                WaitActivity.tableNumber = tableNumber;
+                Intent intent = new Intent(instance, WaitActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                
             }
         });
     }
