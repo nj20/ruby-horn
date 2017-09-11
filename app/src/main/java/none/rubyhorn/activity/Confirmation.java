@@ -75,7 +75,8 @@ public class Confirmation extends AppCompatActivity
             public void onResponse(Object response)
             {
                 WaitActivity.menu = menu;
-                WaitActivity.order = order;
+                WaitActivity.addOrder(order);
+                order = null;
                 WaitActivity.tableNumber = tableNumber;
                 Intent intent = new Intent(instance, WaitActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -83,7 +84,7 @@ public class Confirmation extends AppCompatActivity
                 Context context = getApplicationContext();
                 SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.orderFile), context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPref.edit();
-                editor.putString(menu.restaurantId, "");
+                editor.remove(menu.restaurantId);
                 editor.commit();
             }
         });
@@ -93,6 +94,8 @@ public class Confirmation extends AppCompatActivity
     public void onPause()
     {
         super.onPause();
+        if(order == null)
+            return;
         SharedPreferences sharedPref = getApplicationContext().getSharedPreferences(getString(R.string.orderFile), MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString(menu.restaurantId, order.toString());

@@ -143,7 +143,6 @@ public class MenuActivity extends AppCompatActivity
         SharedPreferences sharedPref = getApplicationContext().getSharedPreferences(getString(R.string.orderFile), MODE_PRIVATE);
         sharedPref.edit().clear();
         String jsonOrder = sharedPref.getString(restaurantId, null);
-        Log.d("save1", jsonOrder);
         if(jsonOrder == null)
         {
             return new Order();
