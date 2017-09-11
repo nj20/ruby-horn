@@ -1,6 +1,5 @@
 package none.rubyhorn.activity;
 
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,7 +9,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import none.rubyhorn.R;
@@ -143,7 +141,9 @@ public class MenuActivity extends AppCompatActivity
     private Order loadPreviousOrder(String restaurantId)
     {
         SharedPreferences sharedPref = getApplicationContext().getSharedPreferences(getString(R.string.orderFile), MODE_PRIVATE);
+        sharedPref.edit().clear();
         String jsonOrder = sharedPref.getString(restaurantId, null);
+        Log.d("save1", jsonOrder);
         if(jsonOrder == null)
         {
             return new Order();

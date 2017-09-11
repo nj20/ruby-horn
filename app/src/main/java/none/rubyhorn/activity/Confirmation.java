@@ -1,9 +1,11 @@
 package none.rubyhorn.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.android.volley.Response;
 
@@ -78,7 +80,11 @@ public class Confirmation extends AppCompatActivity
                 Intent intent = new Intent(instance, WaitActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
-                
+                Context context = getApplicationContext();
+                SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.orderFile), context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putString(menu.restaurantId, "");
+                editor.commit();
             }
         });
     }
