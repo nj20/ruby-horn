@@ -22,7 +22,7 @@ import none.rubyhorn.views.MenuView;
 public class MenuActivity extends AppCompatActivity
 {
     private Order order;
-    private String tableNumber;
+    private static String tableNumber;
     private RestaurantMenu menu;
     private MenuView menuView;
     private static Restaurant restaurant;
@@ -32,7 +32,8 @@ public class MenuActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.menu);
-        showTableNumberForm();
+        if(tableNumber == null)
+            showTableNumberForm();
     }
 
     @Override
@@ -117,9 +118,18 @@ public class MenuActivity extends AppCompatActivity
             public void onResponse(MenuItem item)
             {
                 int quantity = order.items.get(item.id);
-                order.items.remove(item.id);
-                order.totalPrice -= quantity * item.price;
-                order.totalQuantity -= quantity;
+                int newQuantity = quantity - 1;
+                if(newQuantity == 0)
+                {
+                    order.items.remove(item.id);
+                }
+                else
+                {
+                    order.items.put(item.id, newQuantity);
+                }
+                order.totalPrice -= item.price;
+                order.totalQuantity -= 1;
+
                 menuView.updateCheckoutButton(instance, order);
             }
         },

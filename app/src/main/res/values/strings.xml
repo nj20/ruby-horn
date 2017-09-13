@@ -2,6 +2,7 @@
     <string name="app_name">Quicky</string>
     <string name="checkInMessage">Check in nearby restaurants</string>
     <string name="checkIn">Checkin</string>
+    <string name="close">Close</string>
     <string name="host" translatable="false">http://golden-bird-qe-756441617.us-west-2.elb.amazonaws.com</string>
     <string name="credentialsFile" translatable="false">none.rubyHorn.iEG7mWq0we7ccbFv</string>
     <string name="orderFile" translatable="false">none.rubyHorn.gDh2Kdfq59KdL1Fv</string>

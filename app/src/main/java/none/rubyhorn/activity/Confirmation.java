@@ -63,9 +63,18 @@ public class Confirmation extends AppCompatActivity
             public void onResponse(MenuItem item)
             {
                 int quantity = order.items.get(item.id);
-                order.items.remove(item.id);
-                order.totalPrice -= quantity * item.price;
-                order.totalQuantity -= quantity;
+                int newQuantity = quantity - 1;
+                if(newQuantity == 0)
+                {
+                    order.items.remove(item.id);
+                    view.removeMenuItem(item);
+                }
+                else
+                {
+                    order.items.put(item.id, newQuantity);
+                }
+                order.totalPrice -=  item.price;
+                order.totalQuantity -= 1;
                 view.updateOrderTotal();
             }
         },

@@ -60,7 +60,7 @@ public class MenuItemView
             {
                 if(onDelete != null)
                 {
-                    instance.resetQuantity();
+                    instance.decrementQuantity();
                     onDelete.onResponse((MenuItem)instance.getView().getTag());
                 }
             }
@@ -76,11 +76,14 @@ public class MenuItemView
         setQuantity(quantity + 1, true);
     }
 
-    public void resetQuantity()
+    public void decrementQuantity()
     {
-        setQuantity(0, true);
+        Context context = menuItemView.getContext().getApplicationContext();
+        Animation appear = AnimationUtils.loadAnimation(context, R.anim.view_pop);
+        View quantityView = menuItemView.findViewById(R.id.quantity);
+        playAnimation(quantityView, appear);
+        setQuantity(this.quantity-1, true);
     }
-
 
     public void setQuantity(int quantity, boolean showDeleteButton)
     {
