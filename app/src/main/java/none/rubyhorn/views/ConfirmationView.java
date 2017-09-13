@@ -3,6 +3,7 @@ package none.rubyhorn.views;
 import android.support.v7.app.AppCompatActivity;
 import none.rubyhorn.models.MenuItem;
 
+import android.text.Layout;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -113,5 +114,11 @@ public class ConfirmationView
     {
         TextView orderTotal = (TextView)context.findViewById(R.id.orderTotal);
         orderTotal.setText("£" + order.totalPrice);
+    }
+
+    public void removeMenuItem(MenuItem item)
+    {
+        LinearLayout layout = (LinearLayout) context.findViewById(R.id.layout);
+        layout.removeView(layout.findViewWithTag(item));
     }
 }

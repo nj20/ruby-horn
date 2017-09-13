@@ -1,5 +1,7 @@
 package none.rubyhorn.views;
 
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -10,6 +12,7 @@ import android.widget.TextView;
 import com.android.volley.Response;
 
 import none.rubyhorn.R;
+import none.rubyhorn.activity.WaitActivity;
 import none.rubyhorn.models.Order;
 import none.rubyhorn.models.RestaurantMenu;
 
@@ -30,6 +33,7 @@ public class WaitView
         this.onAdd = onAdd;
         setItemList();
         setAddItemsButton();
+        setCallWaiterButton();
     }
 
     private void setItemList()
@@ -61,5 +65,37 @@ public class WaitView
                 onAdd.onResponse(null);
             }
         });
+    }
+
+    private void setCallWaiterButton()
+    {
+        Button callWaiterButton = (Button)context.findViewById(R.id.callWaiterButton);
+        callWaiterButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                showCallWaiterConfirmation();
+            }
+        });
+    }
+
+    private void showCallWaiterConfirmation()
+    {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
+        final View view = context.getLayoutInflater().inflate(R.layout.call_waiter_confirmation, null);
+        dialogBuilder.setView(view);
+        dialogBuilder.setPositiveButton(null, new DialogInterface.OnClickListener()
+        {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i)
+            {
+
+            }
+        });
+
+        dialogBuilder.create();
+        dialogBuilder.show();
+
     }
 }
