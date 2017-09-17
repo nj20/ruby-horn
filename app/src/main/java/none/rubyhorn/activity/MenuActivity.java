@@ -107,8 +107,6 @@ public class MenuActivity extends AppCompatActivity
                 {
                     order.items.put(item.id, order.items.get(item.id) + 1);
                 }
-                order.totalPrice += item.price;
-                order.totalQuantity++;
                 menuView.updateCheckoutButton(instance, order);
             }
         },
@@ -127,9 +125,6 @@ public class MenuActivity extends AppCompatActivity
                 {
                     order.items.put(item.id, newQuantity);
                 }
-                order.totalPrice -= item.price;
-                order.totalQuantity -= 1;
-
                 menuView.updateCheckoutButton(instance, order);
             }
         },
@@ -159,7 +154,9 @@ public class MenuActivity extends AppCompatActivity
         }
         else
         {
-            return new Order(jsonOrder);
+            Order order = new Order(jsonOrder);
+            order.tip = 0;
+            return order;
         }
     }
 

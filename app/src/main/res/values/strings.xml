@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Quicky</string>
+    <string name="app_name">BlinknEat</string>
     <string name="checkInMessage">Check in nearby restaurants</string>
     <string name="checkIn">Checkin</string>
     <string name="close">Close</string>

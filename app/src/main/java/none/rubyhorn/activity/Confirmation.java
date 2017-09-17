@@ -52,8 +52,15 @@ public class Confirmation extends AppCompatActivity
                 {
                     order.items.put(item.id, order.items.get(item.id) + 1);
                 }
-                order.totalPrice += item.price;
-                order.totalQuantity++;
+                view.updateOrderTotal();
+            }
+        },
+        new Response.Listener<Integer>()
+        {
+            @Override
+            public void onResponse(Integer tip)
+            {
+                order.tip = tip;
                 view.updateOrderTotal();
             }
         },
@@ -73,8 +80,6 @@ public class Confirmation extends AppCompatActivity
                 {
                     order.items.put(item.id, newQuantity);
                 }
-                order.totalPrice -=  item.price;
-                order.totalQuantity -= 1;
                 view.updateOrderTotal();
             }
         },

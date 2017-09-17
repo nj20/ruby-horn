@@ -3,6 +3,7 @@ package none.rubyhorn.models;
 import android.util.Log;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 
@@ -10,18 +11,16 @@ public class Order
 {
     public Map<String, Integer> items;
 
-    public float totalPrice;
-
-    public int totalQuantity;
+    public int tip;
 
     public Order()
     {
         items = new HashMap<>();
     }
 
-    public Order(String json)
+    public Order(String string)
     {
-        String[] data = json.split(";");
+        String[] data = string.split(";");
 
         String order = data[0];
         order = order.substring(1, order.length()-1);
@@ -38,13 +37,34 @@ public class Order
         }
 
         String[] metaData = data[1].split(",");
-        totalPrice = Float.parseFloat(metaData[0]);
-        totalQuantity = Integer.parseInt(metaData[1]);
+    }
 
+    public double getOrderTotal(RestaurantMenu menu)
+    {
+        double totalPrice = 0;
+        Iterator it = items.entrySet().iterator();
+        while (it.hasNext())
+        {
+            Map.Entry<String, Integer> pair = (Map.Entry)it.next();
+            totalPrice += menu.getItem(pair.getKey()).price * pair.getValue();
+        }
+        return totalPrice + tip;
+    }
+
+    public int getTotalNumberOfItems()
+    {
+        int totalNumber = 0;
+        Iterator it = items.entrySet().iterator();
+        while (it.hasNext())
+        {
+            Map.Entry<String, Integer> pair = (Map.Entry)it.next();
+            totalNumber += pair.getValue();
+        }
+        return totalNumber;
     }
 
     public String toString()
     {
-        return items.toString() + ";" + totalPrice + "," + totalQuantity;
+        return items.toString();
     }
 }
