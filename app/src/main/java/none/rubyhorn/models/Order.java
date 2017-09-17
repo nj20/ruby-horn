@@ -35,8 +35,6 @@ public class Order
             }
             items.put(entry[0].trim(), Integer.parseInt(entry[1].trim()));
         }
-
-        String[] metaData = data[1].split(",");
     }
 
     public double getOrderTotal(RestaurantMenu menu)
