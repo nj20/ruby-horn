@@ -63,8 +63,6 @@ public class WaitActivity extends AppCompatActivity
         {
             setOrder();
         }
-        order.totalPrice += newOrder.totalPrice;
-        order.totalQuantity += newOrder.totalQuantity;
         Iterator it = newOrder.items.entrySet().iterator();
         while (it.hasNext())
         {

@@ -18,9 +18,11 @@ public class MenuView
 {
     TextView totalQuantity;
     TextView totalPrice;
+    RestaurantMenu menu;
 
     public MenuView(AppCompatActivity context, Restaurant restaurant, RestaurantMenu menu, Order order, Response.Listener<MenuItem> onAdd, Response.Listener<MenuItem> onDelete, Response.Listener onCheckout)
     {
+        this.menu = menu;
         clearMenu(context);
         setMenuHeader(context, restaurant);
         setMenu(context, menu, order, onAdd, onDelete);
@@ -99,8 +101,7 @@ public class MenuView
     private void updateCheckoutButton(AppCompatActivity context, Order order, final Response.Listener onCheckout)
     {
         ConstraintLayout checkout = (ConstraintLayout) context.findViewById(R.id.checkout);
-
-        if(order.totalQuantity > 0)
+        if(order.getTotalNumberOfItems() > 0)
         {
             checkout.setVisibility(View.VISIBLE);
         }
@@ -115,8 +116,8 @@ public class MenuView
         if(totalPrice == null)
             totalPrice = checkout.findViewById(R.id.price);
 
-        totalQuantity.setText(order.totalQuantity + "");
-        totalPrice.setText(order.totalPrice + "£");
+        totalQuantity.setText(order.getTotalNumberOfItems() + "");
+        totalPrice.setText(order.getOrderTotal(menu) + "£");
 
         if(onCheckout != null)
         {
