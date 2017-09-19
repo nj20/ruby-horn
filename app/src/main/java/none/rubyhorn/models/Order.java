@@ -11,8 +11,6 @@ public class Order
 {
     public Map<String, Integer> items;
 
-    public int tip;
-
     public Order()
     {
         items = new HashMap<>();
@@ -46,7 +44,7 @@ public class Order
             Map.Entry<String, Integer> pair = (Map.Entry)it.next();
             totalPrice += menu.getItem(pair.getKey()).price * pair.getValue();
         }
-        return totalPrice + tip;
+        return totalPrice;
     }
 
     public int getTotalNumberOfItems()
