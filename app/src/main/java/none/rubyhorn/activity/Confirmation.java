@@ -55,15 +55,6 @@ public class Confirmation extends AppCompatActivity
                 view.updateOrderTotal();
             }
         },
-        new Response.Listener<Integer>()
-        {
-            @Override
-            public void onResponse(Integer tip)
-            {
-                order.tip = tip;
-                view.updateOrderTotal();
-            }
-        },
         new Response.Listener<MenuItem>()
         {
             @Override

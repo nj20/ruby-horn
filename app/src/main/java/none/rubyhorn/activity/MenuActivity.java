@@ -154,9 +154,7 @@ public class MenuActivity extends AppCompatActivity
         }
         else
         {
-            Order order = new Order(jsonOrder);
-            order.tip = 0;
-            return order;
+            return new Order(jsonOrder);
         }
     }
 
