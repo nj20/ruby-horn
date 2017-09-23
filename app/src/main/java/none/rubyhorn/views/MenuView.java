@@ -2,11 +2,15 @@ package none.rubyhorn.views;
 
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.android.volley.Response;
+
+import java.util.ArrayList;
+
 import none.rubyhorn.R;
 import none.rubyhorn.models.MenuItem;
 import none.rubyhorn.models.MenuSection;
@@ -19,14 +23,19 @@ public class MenuView
     TextView totalQuantity;
     TextView totalPrice;
     RestaurantMenu menu;
+    private ArrayList<View> sectionViews;
+    private ArrayList<MenuSection> filteredSectionViewsOptions;
 
     public MenuView(AppCompatActivity context, Restaurant restaurant, RestaurantMenu menu, Order order, Response.Listener<MenuItem> onAdd, Response.Listener<MenuItem> onDelete, Response.Listener onCheckout)
     {
+        sectionViews = new ArrayList<>();
+        filteredSectionViewsOptions = new ArrayList<>();
         this.menu = menu;
         clearMenu(context);
         setMenuHeader(context, restaurant);
         setMenu(context, menu, order, onAdd, onDelete);
         updateCheckoutButton(context, order, onCheckout);
+        setMenuSlider(context, menu);
     }
 
     private void clearMenu(final AppCompatActivity context)
@@ -61,6 +70,7 @@ public class MenuView
             MenuSection section = menu.sections[sectionCount];
             View sectionView = View.inflate(context, R.layout.menu_section, null);
             setSection(context, sectionView, section, order, onAdd, onDelete);
+            sectionViews.add(sectionView);
             layout.addView(sectionView);
         }
     }
@@ -81,6 +91,8 @@ public class MenuView
             View menuItemView = setMenuItem(context, item, order.items.get(item.id), onAdd, onDelete);
             sectionViewLayout.addView(menuItemView);
         }
+
+        sectionView.setTag(R.string.sectionId, section.name);
     }
 
     private View setMenuItem(final AppCompatActivity context, MenuItem item, Integer quantity, final Response.Listener<MenuItem> onAdd, final Response.Listener<MenuItem> onDelete)
@@ -129,6 +141,59 @@ public class MenuView
                     onCheckout.onResponse(null);
                 }
             });
+        }
+    }
+
+    private void setMenuSlider(final AppCompatActivity context, RestaurantMenu menu)
+    {
+        MenuSliderView slider = new MenuSliderView(context, menu, new Response.Listener<MenuSection>()
+        {
+            @Override
+            public void onResponse(MenuSection section)
+            {
+                filteredSectionViewsOptions.add(section);
+                setFilteredMenu(context);
+            }
+        }, new Response.Listener<MenuSection>()
+        {
+            @Override
+            public void onResponse(MenuSection section)
+            {
+                filteredSectionViewsOptions.remove(section);
+                setFilteredMenu(context);
+            }
+        });
+    }
+
+    private void setFilteredMenu(AppCompatActivity context)
+    {
+        LinearLayout layout = (LinearLayout)context.findViewById(R.id.menuLayout);
+
+        for(int count = 0; count < sectionViews.size(); count++)
+        {
+            layout.removeView(sectionViews.get(count));
+        }
+
+        if(filteredSectionViewsOptions.size() == 0)
+        {
+            for(int count = 0; count < sectionViews.size(); count++)
+            {
+                layout.addView(sectionViews.get(count));
+            }
+        }
+        else
+        {
+            for(int count = 0; count < sectionViews.size(); count++)
+            {
+                for(int filteredSectionCount = 0; filteredSectionCount < filteredSectionViewsOptions.size(); filteredSectionCount++)
+                {
+                    MenuSection filteredSectionViewOption = filteredSectionViewsOptions.get(filteredSectionCount);
+                    if(sectionViews.get(count).getTag(R.string.sectionId).equals(filteredSectionViewOption.name))
+                    {
+                        layout.addView(sectionViews.get(count));
+                    }
+                }
+            }
         }
     }
 }

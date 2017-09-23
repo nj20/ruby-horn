@@ -98,4 +98,11 @@ public abstract class ActivityWithLocationPermission extends AppCompatActivity {
      */
     public abstract void onLocationChange(Location location);
 
+    public boolean checkLocationPermission()
+    {
+
+        String permission = "android.permission.ACCESS_FINE_LOCATION";
+        int res = checkCallingOrSelfPermission(permission);
+        return (res == PackageManager.PERMISSION_GRANTED);
+    }
 }
