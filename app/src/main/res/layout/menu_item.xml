@@ -98,7 +98,6 @@
             android:layout_height="wrap_content"
             android:text="x0"
             android:textAlignment="center"
-            android:textColor="@color/colorPrimary"
             android:textStyle="bold"
             android:visibility="invisible"
             app:layout_constraintLeft_toRightOf="@+id/name"

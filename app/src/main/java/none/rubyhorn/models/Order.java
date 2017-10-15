@@ -2,6 +2,10 @@ package none.rubyhorn.models;
 
 import android.util.Log;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -62,5 +66,21 @@ public class Order
     public String toString()
     {
         return items.toString();
+    }
+
+    public JSONArray toJsonArray() throws JSONException
+    {
+        JSONArray array = new JSONArray();
+
+        Iterator it = items.entrySet().iterator();
+        while (it.hasNext())
+        {
+            Map.Entry<String, Integer> pair = (Map.Entry)it.next();
+            JSONObject object = new JSONObject();
+            object.put("itemId", pair.getKey());
+            object.put("quantity", pair.getValue());
+            array.put(object);
+        }
+        return array;
     }
 }
