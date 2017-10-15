@@ -3,17 +3,22 @@ package none.rubyhorn.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Debug;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
+
+import org.json.JSONObject;
 
 import none.rubyhorn.R;
 import none.rubyhorn.models.MenuItem;
 import none.rubyhorn.models.Order;
 import none.rubyhorn.models.Restaurant;
 import none.rubyhorn.models.RestaurantMenu;
+import none.rubyhorn.service.OrderService;
 import none.rubyhorn.views.ConfirmationView;
 import none.rubyhorn.views.WaitView;
 
@@ -25,6 +30,7 @@ public class Confirmation extends AppCompatActivity
     public static Order order;
 
     private ConfirmationView view;
+    private boolean paid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -77,20 +83,40 @@ public class Confirmation extends AppCompatActivity
         new Response.Listener()
         {
             @Override
-            public void onResponse(Object response)
+            public void onResponse(Object chefNotes)
             {
-                WaitActivity.menu = menu;
-                WaitActivity.addOrder(order);
-                order = null;
-                WaitActivity.tableNumber = tableNumber;
-                Intent intent = new Intent(instance, WaitActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-                Context context = getApplicationContext();
-                SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.orderFile), context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPref.edit();
-                editor.remove(menu.restaurantId);
-                editor.commit();
+                if(!paid)
+                {
+                    paid = true;
+                    OrderService.Instance(getApplicationContext()).sendOrder(restaurant.id, tableNumber, chefNotes.toString(), order,
+                    new Response.Listener<JSONObject>()
+                    {
+                        @Override
+                        public void onResponse(JSONObject response)
+                        {
+                            WaitActivity.menu = menu;
+                            WaitActivity.addOrder(order);
+                            order = null;
+                            WaitActivity.tableNumber = tableNumber;
+                            Intent intent = new Intent(instance, WaitActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                            Context context = getApplicationContext();
+                            SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.orderFile), context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedPref.edit();
+                            editor.remove(menu.restaurantId);
+                            editor.commit();
+                        }
+                    },
+                    new Response.ErrorListener()
+                    {
+                        @Override
+                        public void onErrorResponse(VolleyError error)
+                        {
+                            Log.d("error", error.networkResponse.statusCode + "");
+                        }
+                    });
+                }
             }
         });
     }

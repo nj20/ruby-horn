@@ -19,7 +19,7 @@
         android:layout_marginRight="0dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
-        android:text="A waiter should be on the way"
+        android:text="Error"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat"
         android:textColor="@android:color/black"

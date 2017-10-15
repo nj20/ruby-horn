@@ -24,12 +24,12 @@ public class MenuView
     TextView totalPrice;
     RestaurantMenu menu;
     private ArrayList<View> sectionViews;
-    private ArrayList<MenuSection> filteredSectionViewsOptions;
+    private MenuSection selectedSection;
 
     public MenuView(AppCompatActivity context, Restaurant restaurant, RestaurantMenu menu, Order order, Response.Listener<MenuItem> onAdd, Response.Listener<MenuItem> onDelete, Response.Listener onCheckout)
     {
         sectionViews = new ArrayList<>();
-        filteredSectionViewsOptions = new ArrayList<>();
+        selectedSection = null;
         this.menu = menu;
         clearMenu(context);
         setMenuHeader(context, restaurant);
@@ -151,7 +151,7 @@ public class MenuView
             @Override
             public void onResponse(MenuSection section)
             {
-                filteredSectionViewsOptions.add(section);
+                selectedSection = section;
                 setFilteredMenu(context);
             }
         }, new Response.Listener<MenuSection>()
@@ -159,7 +159,10 @@ public class MenuView
             @Override
             public void onResponse(MenuSection section)
             {
-                filteredSectionViewsOptions.remove(section);
+                if(selectedSection == section)
+                {
+                    selectedSection = null;
+                }
                 setFilteredMenu(context);
             }
         });
@@ -174,7 +177,7 @@ public class MenuView
             layout.removeView(sectionViews.get(count));
         }
 
-        if(filteredSectionViewsOptions.size() == 0)
+        if(selectedSection == null)
         {
             for(int count = 0; count < sectionViews.size(); count++)
             {
@@ -185,14 +188,11 @@ public class MenuView
         {
             for(int count = 0; count < sectionViews.size(); count++)
             {
-                for(int filteredSectionCount = 0; filteredSectionCount < filteredSectionViewsOptions.size(); filteredSectionCount++)
+                if(sectionViews.get(count).getTag(R.string.sectionId).equals(selectedSection.name))
                 {
-                    MenuSection filteredSectionViewOption = filteredSectionViewsOptions.get(filteredSectionCount);
-                    if(sectionViews.get(count).getTag(R.string.sectionId).equals(filteredSectionViewOption.name))
-                    {
-                        layout.addView(sectionViews.get(count));
-                    }
+                    layout.addView(sectionViews.get(count));
                 }
+
             }
         }
     }

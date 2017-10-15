@@ -46,6 +46,8 @@ public class MenuSliderView
 
     private View getSliderItem(final MenuSection section, final Response.Listener<MenuSection> onAddToFilter, final Response.Listener<MenuSection> onRemoveFromFilter)
     {
+        final LinearLayout slider = (LinearLayout)context.findViewById(R.id.sliderLayout);
+
         View sectionButton = View.inflate(context, R.layout.menu_slider_item, null);
         final Button button = (Button)sectionButton.findViewById(R.id.button);
         button.setTag(R.string.selected, false);
@@ -56,7 +58,16 @@ public class MenuSliderView
             @Override
             public void onClick(View view)
             {
-                button.setTag(R.string.selected, !(boolean)button.getTag(R.string.selected));
+                boolean isSelected = (boolean)button.getTag(R.string.selected);
+
+                for(int count = 0; count < slider.getChildCount(); count++)
+                {
+                    Button b = slider.getChildAt(count).findViewById(R.id.button);
+                    b.setTag(R.string.selected, false);
+                    b.setTextColor(context.getResources().getColor(R.color.darker_gray));
+                }
+
+                button.setTag(R.string.selected, !isSelected);
 
                 if((boolean)button.getTag(R.string.selected))
                 {
@@ -66,7 +77,6 @@ public class MenuSliderView
                 else
                 {
                     onRemoveFromFilter.onResponse(section);
-                    button.setTextColor(context.getResources().getColor(R.color.darker_gray));
                 }
             }
         });

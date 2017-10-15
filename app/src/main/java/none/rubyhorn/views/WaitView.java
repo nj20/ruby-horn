@@ -34,13 +34,14 @@ public class WaitView
         setItemList();
         setAddItemsButton();
         setCallWaiterButton();
+        //setExitButton();
     }
 
     private void setItemList()
     {
         LinearLayout layout = (LinearLayout)context.findViewById(R.id.layout);
         layout.removeAllViews();
-        View sectionHeaderView = View.inflate(context, R.layout.confirmation_table_number, null);
+        View sectionHeaderView = View.inflate(context, R.layout.wait_table_number, null);
         TextView sectinoHeaderText = sectionHeaderView.findViewById(R.id.tableNumberHeader);
         sectinoHeaderText.setText("Table Number: " + tableNumber);
         layout.addView(sectionHeaderView);
@@ -80,12 +81,44 @@ public class WaitView
         });
     }
 
+    private void setExitButton()
+    {
+        View close = context.findViewById(R.id.close);
+        close.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                showFeedbackPopup();
+            }
+        });
+    }
+
     private void showCallWaiterConfirmation()
     {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
         final View view = context.getLayoutInflater().inflate(R.layout.call_waiter_confirmation, null);
         dialogBuilder.setView(view);
         dialogBuilder.setPositiveButton(null, new DialogInterface.OnClickListener()
+        {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i)
+            {
+
+            }
+        });
+
+        dialogBuilder.create();
+        dialogBuilder.show();
+
+    }
+
+    private void showFeedbackPopup()
+    {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
+        final View view = context.getLayoutInflater().inflate(R.layout.wait_feedback, null);
+        dialogBuilder.setView(view);
+        dialogBuilder.setPositiveButton("Skip", new DialogInterface.OnClickListener()
         {
             @Override
             public void onClick(DialogInterface dialogInterface, int i)
