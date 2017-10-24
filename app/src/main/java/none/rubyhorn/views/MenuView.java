@@ -2,7 +2,6 @@ package none.rubyhorn.views;
 
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -81,7 +80,7 @@ public class MenuView
 
         //Setting section header
         View sectionHeaderView = View.inflate(context, R.layout.menu_section_header, null);
-        TextView sectinoHeaderText = sectionHeaderView.findViewById(R.id.tableNumberHeader);
+        TextView sectinoHeaderText = sectionHeaderView.findViewById(R.id.itemName);
         sectinoHeaderText.setText(section.name);
         sectionViewLayout.addView(sectionHeaderView);
 

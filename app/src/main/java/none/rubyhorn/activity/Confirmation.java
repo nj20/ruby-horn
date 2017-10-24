@@ -1,12 +1,16 @@
 package none.rubyhorn.activity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Debug;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -113,7 +117,8 @@ public class Confirmation extends AppCompatActivity
                         @Override
                         public void onErrorResponse(VolleyError error)
                         {
-                            Log.d("error", error.networkResponse.statusCode + "");
+                            showErrorDialog("We could not connect to our servers. There might be a problem with your internet or our servers");
+                            paid = false;
                         }
                     });
                 }
@@ -131,5 +136,24 @@ public class Confirmation extends AppCompatActivity
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString(menu.restaurantId, order.toString());
         editor.commit();
+    }
+
+    private void showErrorDialog(String error)
+    {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(Confirmation.this);
+        final View view = getLayoutInflater().inflate(R.layout.error_message, null);
+        TextView header = (TextView) view.findViewById(R.id.header);
+        header.setText(error);
+        dialogBuilder.setView(view);
+        dialogBuilder.setCancelable(false);
+        dialogBuilder.setPositiveButton(R.string.close, new DialogInterface.OnClickListener()
+        {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i)
+            {
+            }
+
+        });
+        dialogBuilder.show();
     }
 }

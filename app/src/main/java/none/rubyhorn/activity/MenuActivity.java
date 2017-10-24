@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
+
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import none.rubyhorn.R;
@@ -32,8 +34,6 @@ public class MenuActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.menu);
-        if(tableNumber == null)
-            showTableNumberForm();
     }
 
     @Override
@@ -48,13 +48,15 @@ public class MenuActivity extends AppCompatActivity
                 menu = response;
                 order = loadPreviousOrder(menu.restaurantId);
                 setMenuView(restaurant, menu, order);
+                if(tableNumber == null)
+                    showTableNumberForm();
             }
         }, new Response.ErrorListener()
         {
             @Override
             public void onErrorResponse(VolleyError error)
             {
-
+                showErrorDialog("We could not connect to our servers. There might be a problem with your internet or our servers");
             }
         });
     }
@@ -162,14 +164,39 @@ public class MenuActivity extends AppCompatActivity
     public void onPause()
     {
         super.onPause();
-        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences(getString(R.string.orderFile), MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString(menu.restaurantId, order.toString());
-        editor.commit();
+        if(menu != null)
+        {
+            SharedPreferences sharedPref = getApplicationContext().getSharedPreferences(getString(R.string.orderFile), MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putString(menu.restaurantId, order.toString());
+            editor.commit();
+        }
     }
 
     public static void setRestaurant(Restaurant restaurant)
     {
         MenuActivity.restaurant = restaurant;
+    }
+
+    private void showErrorDialog(String error)
+    {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(MenuActivity.this);
+        final View view = getLayoutInflater().inflate(R.layout.error_message, null);
+        TextView header = (TextView) view.findViewById(R.id.header);
+        header.setText(error);
+        dialogBuilder.setView(view);
+        dialogBuilder.setCancelable(false);
+        dialogBuilder.setPositiveButton(R.string.try_again, new DialogInterface.OnClickListener()
+        {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i)
+            {
+                Intent intent = getIntent();
+                finish();
+                startActivity(intent);
+            }
+
+        });
+        dialogBuilder.show();
     }
 }
