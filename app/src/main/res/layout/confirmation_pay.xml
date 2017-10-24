@@ -65,7 +65,7 @@
         android:layout_marginRight="8dp"
         android:layout_marginTop="0dp"
         android:backgroundTint="@color/colorPrimary"
-        android:text="Cash"
+        android:text="Card"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat"
         android:textColor="@android:color/white"

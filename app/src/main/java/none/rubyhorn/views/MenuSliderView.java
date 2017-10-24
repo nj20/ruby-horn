@@ -64,7 +64,14 @@ public class MenuSliderView
                 {
                     Button b = slider.getChildAt(count).findViewById(R.id.button);
                     b.setTag(R.string.selected, false);
-                    b.setTextColor(context.getResources().getColor(R.color.darker_gray));
+                    if(isSelected)
+                    {
+                        b.setTextColor(context.getResources().getColor(R.color.colorPrimary));
+                    }
+                    else
+                    {
+                        b.setTextColor(context.getResources().getColor(R.color.darker_gray));
+                    }
                 }
 
                 button.setTag(R.string.selected, !isSelected);

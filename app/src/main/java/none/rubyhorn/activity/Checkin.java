@@ -2,13 +2,11 @@ package none.rubyhorn.activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.android.volley.Response;
@@ -18,6 +16,7 @@ import none.rubyhorn.R;
 import none.rubyhorn.activity.template.ActivityWithLocationPermission;
 import none.rubyhorn.models.Restaurant;
 import none.rubyhorn.service.RestaurantService;
+import none.rubyhorn.util.InternetConnection;
 import none.rubyhorn.views.RestaurantListView;
 
 /**
@@ -27,6 +26,7 @@ import none.rubyhorn.views.RestaurantListView;
 public class Checkin extends ActivityWithLocationPermission
 {
     private RestaurantListView restaurantListView;
+    private boolean locationRecorded = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -39,23 +39,40 @@ public class Checkin extends ActivityWithLocationPermission
     protected void onResume()
     {
         super.onResume();
-        //Requests for location every time activity is resumed
-        getLocationPermissions();
-
+        if(!InternetConnection.isConntected(this))
+        {
+            showErrorDialog("It seems that you are not connected to the internet. Please check your connection and try again");
+        }
+        else
+        {
+            //Requests for location every time activity is resumed
+            getLocationPermissions();
+            if(!isLocationServiceEnabled())
+            {
+                showErrorDialog("We were not able to get your location in order to suggest you restaurants. Please check your location service and try again");
+            }
+        }
+        locationRecorded = false;
     }
 
     @Override
     public void onLocationChange(Location location)
     {
+        Log.d("save", "comes");
+        if(location != null)
+        Log.d("save", location.toString());
+        Log.d("save", locationRecorded + "");
         //Once we get the location, we do not need to request further updates
-        if(location == null)
+        if(locationRecorded || location == null)
         {
             return;
         }
         else
         {
-            locationManager.removeUpdates(locationListener);
+            locationRecorded = true;
         }
+        Log.d("save", "ROFL");
+
         RestaurantService restaurantService = RestaurantService.Instance(this);
         double latitude = location.getLatitude();
         double longitude = location.getLongitude();
@@ -106,12 +123,14 @@ public class Checkin extends ActivityWithLocationPermission
         header.setText(error);
         dialogBuilder.setView(view);
         dialogBuilder.setCancelable(false);
-        dialogBuilder.setPositiveButton(R.string.close, new DialogInterface.OnClickListener()
+        dialogBuilder.setPositiveButton(R.string.try_again, new DialogInterface.OnClickListener()
         {
             @Override
             public void onClick(DialogInterface dialogInterface, int i)
             {
+                Intent intent = getIntent();
                 finish();
+                startActivity(intent);
             }
 
         });

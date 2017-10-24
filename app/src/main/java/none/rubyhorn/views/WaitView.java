@@ -1,6 +1,7 @@
 package none.rubyhorn.views;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -12,7 +13,6 @@ import android.widget.TextView;
 import com.android.volley.Response;
 
 import none.rubyhorn.R;
-import none.rubyhorn.activity.WaitActivity;
 import none.rubyhorn.models.Order;
 import none.rubyhorn.models.RestaurantMenu;
 
@@ -42,7 +42,7 @@ public class WaitView
         LinearLayout layout = (LinearLayout)context.findViewById(R.id.layout);
         layout.removeAllViews();
         View sectionHeaderView = View.inflate(context, R.layout.wait_table_number, null);
-        TextView sectinoHeaderText = sectionHeaderView.findViewById(R.id.tableNumberHeader);
+        TextView sectinoHeaderText = sectionHeaderView.findViewById(R.id.itemName);
         sectinoHeaderText.setText("Table Number: " + tableNumber);
         layout.addView(sectionHeaderView);
         Log.d("save", order.toString());
@@ -81,7 +81,7 @@ public class WaitView
         });
     }
 
-    private void setExitButton()
+    /*private void setExitButton()
     {
         View close = context.findViewById(R.id.close);
         close.setOnClickListener(new View.OnClickListener()
@@ -89,10 +89,15 @@ public class WaitView
             @Override
             public void onClick(View view)
             {
-                showFeedbackPopup();
+                //showFeedbackPopup();
+                Intent i = context.getBaseContext().getPackageManager()
+                        .getLaunchIntentForPackage( context.getBaseContext().getPackageName() );
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                context.finish();
+                context.startActivity(i);
             }
         });
-    }
+    }*/
 
     private void showCallWaiterConfirmation()
     {

@@ -4,22 +4,15 @@ import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
-import none.rubyhorn.activity.Checkin;
-import none.rubyhorn.activity.Confirmation;
 import none.rubyhorn.models.MenuItem;
 
-import android.text.Layout;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.android.volley.Response;
-
-import org.w3c.dom.Text;
 
 import none.rubyhorn.R;
 import none.rubyhorn.models.Order;
@@ -60,7 +53,7 @@ public class ConfirmationView
         LinearLayout layout = (LinearLayout)context.findViewById(R.id.layout);
         layout.removeAllViews();
         View sectionHeaderView = View.inflate(context, R.layout.confirmation_table_number, null);
-        TextView sectinoHeaderText = sectionHeaderView.findViewById(R.id.tableNumberHeader);
+        TextView sectinoHeaderText = sectionHeaderView.findViewById(R.id.itemName);
         sectinoHeaderText.setText("Table Number: " + tableNumber);
         layout.addView(sectionHeaderView);
 

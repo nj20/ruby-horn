@@ -12,6 +12,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 /**
  * Extend this class to get activity with location permission and tracking
@@ -23,16 +24,19 @@ public abstract class ActivityWithLocationPermission extends AppCompatActivity {
 
     protected LocationListener locationListener;
     protected LocationManager locationManager;
-    private long minTimeUpdate = 0;
-    private long minDistanceUpdate = 0;
+    private long minTimeUpdate = 10;
+    private long minDistanceUpdate = 10;
 
     //check for permission first time and adds location service permission
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
+    {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         //check if we have permission
-        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+        {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
+            {
 
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, minTimeUpdate, minDistanceUpdate, locationListener);
                 Location loc = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
@@ -98,11 +102,17 @@ public abstract class ActivityWithLocationPermission extends AppCompatActivity {
      */
     public abstract void onLocationChange(Location location);
 
-    public boolean checkLocationPermission()
+    public boolean isLocationServiceEnabled()
     {
+        boolean gps_enabled = false;
+        boolean network_enabled = false;
 
-        String permission = "android.permission.ACCESS_FINE_LOCATION";
-        int res = checkCallingOrSelfPermission(permission);
-        return (res == PackageManager.PERMISSION_GRANTED);
+        try
+        {
+            gps_enabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+            network_enabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        }
+        catch(Exception ex) {}
+        return (gps_enabled || network_enabled);
     }
 }
