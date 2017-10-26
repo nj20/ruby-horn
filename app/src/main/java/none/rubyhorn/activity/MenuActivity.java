@@ -24,7 +24,7 @@ import none.rubyhorn.views.MenuView;
 public class MenuActivity extends AppCompatActivity
 {
     private Order order;
-    private static String tableNumber;
+    public static String tableNumber;
     private RestaurantMenu menu;
     private MenuView menuView;
     private static Restaurant restaurant;
@@ -83,6 +83,14 @@ public class MenuActivity extends AppCompatActivity
                 {
                     instance.tableNumber = tableNumber;
                 }
+            }
+        });
+        dialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener()
+        {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i)
+            {
+                finish();
             }
         });
 
