@@ -76,10 +76,10 @@ public class HttpRequestManager
 
                 if(networkResponse == null)
                 {
-                    errorListener.onErrorResponse(new VolleyError("Can't connect to server"));
+                    Log.d("ERROR", error.getMessage());
                 }
                 //If Unauthorized
-                else if(networkResponse.statusCode == 401)
+                if(networkResponse == null || networkResponse.statusCode == 401)
                 {
                     //Generate new session key
                     AuthenticationManager.Instance(context).setSessionKey(new Response.Listener<Map<String, String>>() {

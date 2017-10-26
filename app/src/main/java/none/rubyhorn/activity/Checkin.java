@@ -26,59 +26,51 @@ import none.rubyhorn.views.RestaurantListView;
 public class Checkin extends ActivityWithLocationPermission
 {
     private RestaurantListView restaurantListView;
-    private boolean locationRecorded = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.checkin);
-    }
 
-    @Override
-    protected void onResume()
-    {
-        super.onResume();
         if(!InternetConnection.isConntected(this))
         {
             showErrorDialog("It seems that you are not connected to the internet. Please check your connection and try again");
         }
         else
         {
-            //Requests for location every time activity is resumed
-            getLocationPermissions();
+            //Gets location update. When this method is called, onLocationChange is triggered.
+            requestLocationUpdate();
             if(!isLocationServiceEnabled())
             {
                 showErrorDialog("We were not able to get your location in order to suggest you restaurants. Please check your location service and try again");
             }
         }
-        locationRecorded = false;
+    }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        updateLocation();
+        MenuActivity.tableNumber = null;
     }
 
     @Override
     public void onLocationChange(Location location)
     {
-        Log.d("save", "comes");
-        if(location != null)
-        Log.d("save", location.toString());
-        Log.d("save", locationRecorded + "");
         //Once we get the location, we do not need to request further updates
-        if(locationRecorded || location == null)
+        if(location == null)
         {
+            showErrorDialog("We were not able to get your location in order to suggest you restaurants. Please check your location service and try again");
             return;
         }
-        else
-        {
-            locationRecorded = true;
-        }
-        Log.d("save", "ROFL");
 
         RestaurantService restaurantService = RestaurantService.Instance(this);
         double latitude = location.getLatitude();
         double longitude = location.getLongitude();
         float accuracy = location.getAccuracy();
         float range = 1000000000;
-
         restaurantService.getRestaurantsByLocation(latitude, longitude, accuracy, range, new Response.Listener<Restaurant[]>()
         {
             @Override
@@ -118,6 +110,7 @@ public class Checkin extends ActivityWithLocationPermission
     private void showErrorDialog(String error)
     {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(Checkin.this);
+
         final View view = getLayoutInflater().inflate(R.layout.error_message, null);
         TextView header = (TextView) view.findViewById(R.id.header);
         header.setText(error);
