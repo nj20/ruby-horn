@@ -34,7 +34,7 @@ public class WaitView
         setItemList();
         setAddItemsButton();
         setCallWaiterButton();
-        //setExitButton();
+        showFeedbackPopup();
     }
 
     private void setItemList()
@@ -89,7 +89,7 @@ public class WaitView
             @Override
             public void onClick(View view)
             {
-                //showFeedbackPopup();
+                showFeedbackPopup();
                 Intent i = context.getBaseContext().getPackageManager()
                         .getLaunchIntentForPackage( context.getBaseContext().getPackageName() );
                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
