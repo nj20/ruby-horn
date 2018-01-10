@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">BlinknEat</string>
+    <string name="checkInMessage">Check in nearby restaurants</string>
+    <string name="checkIn">Checkin</string>
+    <string name="close">Close</string>
+    <string name="host" translatable="false">http://golden-bird-qe-756441617.us-west-2.elb.amazonaws.com</string>
+    <string name="credentialsFile" translatable="false">none.rubyHorn.iEG7mWq0we7ccbFv</string>
+    <string name="orderFile" translatable="false">none.rubyHorn.gDh2Kdfq59KdL1Fv</string>
+    <string name="savedUserid" translatable="false">userid</string>
+    <string name="savedUserpassword" translatable="false">userpassword</string>
+    <string name="savedSessionkey" translatable="false">sessionkey</string>
+    <string name="restaurantId" translatable="false">restaurantId</string>
+    <string name="menuItemId" translatable="false">menuItemId</string>
+    <string name="title_activity_menu">MenuActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="title_activity_wait">Wait</string>
+    <string name="selected">selected</string>
+    <string name="sectionId">sectionId</string>
+    <string name="ok">OK</string>
+    <string name="try_again">Try Again</string>
+</resources>

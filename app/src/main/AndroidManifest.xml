@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="none.rubyhorn">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@drawable/ic_launcher"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme.NoTitle">
+        <activity
+            android:name=".activity.Checkin"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/AppTheme.NoTitle">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.MenuActivity"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name=".activity.Confirmation"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name=".activity.WaitActivity"
+            android:label="@string/title_activity_wait"
+            android:theme="@style/AppTheme.NoTitle" />
+        <activity android:name=".activity.CustomizeItem"></activity>
+    </application>
+
+</manifest>
